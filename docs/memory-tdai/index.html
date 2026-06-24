@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>memory-tdai · 健康监控</title>
+
+  <!-- Apple HIG Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Chart.js v4 CDN (loaded before CSS so it's available globally) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="./assets/css/dashboard.css" />
+
+  <style>
+    /* Minimal placeholder style (replaced once JS renders) */
+    .db-memorytdai-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #6e6e73;
+      gap: 12px;
+      text-align: center;
+    }
+    .db-memorytdai-placeholder h1 { color: #1d1d1f; font-size: 24px; }
+    .db-memorytdai-placeholder a { color: #0071e3; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- ── Header ───────────────────────────────────────── -->
+    <header class="app-header">
+      <div class="header-left">
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <a href="https://yrwd999.github.io/private-dashboard/">私有监控</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <span>memory-tdai</span>
+        </nav>
+        <h1>memory-tdai · 健康监控</h1>
+      </div>
+      <div class="header-right">
+        <span class="updated-at" id="header-updated">加载中…</span>
+        <span class="db-size" id="header-dbsize">—</span>
+      </div>
+    </header>
+
+    <!-- ── Main ─────────────────────────────────────────── -->
+    <main class="app-main" id="app-main">
+      <!-- Skeleton / error / dashboard rendered here by JS -->
+      <div class="db-memorytdai-placeholder">
+        <h1>memory-tdai · 健康监控</h1>
+        <p>正在加载数据…</p>
+      </div>
+    </main>
+
+    <!-- ── Footer ────────────────────────────────────────── -->
+    <footer class="app-footer">
+      <span>memory-tdai 健康监控 · OpenClaw L0/L1/L2 记忆系统</span>
+      <span>
+        Exporter:
+        <a href="https://github.com/yrwd999/private-dashboard/blob/main/scripts/exporter_memory_tdai.py" target="_blank" rel="noopener">exporter_memory_tdai.py</a>
+        · Dashboard:
+        <a href="https://github.com/yrwd999/private-dashboard/tree/main/docs/memory-tdai" target="_blank" rel="noopener">source</a>
+      </span>
+    </footer>
+  </div>
+
+  <!-- Dashboard JS (Chart.js must load first) -->
+  <script>
+    if (typeof Chart === 'undefined') {
+      document.querySelector('.db-memorytdai-placeholder p').textContent =
+        'Chart.js 加载失败，请刷新页面';
+    }
+  </script>
+  <script src="./assets/js/dashboard.js"></script>
+</body>
+</html>
