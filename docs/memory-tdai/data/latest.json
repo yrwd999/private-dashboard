@@ -1,18 +1,18 @@
 {
   "meta": {
-    "generated_at": "2026-06-24T03:22:13+08:00",
+    "generated_at": "2026-06-24T03:29:24+08:00",
     "vectors_db_size_mb": 128.9,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_mb": 13.341,
+    "jsonl_total_mb": 13.364,
     "jsonl_file_count": 24,
-    "wal_size_mb": 3.95,
+    "wal_size_mb": 3.99,
     "schema_version": "1.0"
   },
   "l0": {
-    "conversations": 17016,
-    "vectors": 16843,
-    "missing": 173,
-    "completeness_pct": 99.0,
+    "conversations": 17062,
+    "vectors": 16852,
+    "missing": 210,
+    "completeness_pct": 98.8,
     "fts_synced": true,
     "errors_24h": {
       "http_400_batch_size": 0,
@@ -25,8 +25,8 @@
     "capture_trend_30d": []
   },
   "l1": {
-    "records": 201,
-    "vectors": 196,
+    "records": 202,
+    "vectors": 197,
     "missing": 5,
     "completeness_pct": 97.5,
     "fts_synced": true,
@@ -61,16 +61,16 @@
   },
   "l3": {
     "persona_exists": true,
-    "last_updated": "2026-06-24T03:17:51Z",
+    "last_updated": "2026-06-24T03:24:27Z",
     "last_updated_days_ago": 0.0,
     "file_size_bytes": 8427,
     "freshness": "healthy"
   },
   "storage": {
     "vectors_db_mb": 128.9,
-    "wal_mb": 3.95,
+    "wal_mb": 3.99,
     "wal_oversized": false,
-    "jsonl_total_mb": 13.341,
+    "jsonl_total_mb": 13.364,
     "jsonl_file_count": 24,
     "backup_mb": 0.0,
     "storage_growth_mb_per_day": 0.0
@@ -104,9 +104,9 @@
     "clean_time": "03:00",
     "last_run": null,
     "last_run_days_ago": 9999,
-    "l0_total": 17016,
+    "l0_total": 17062,
     "l0_expired": 0,
-    "l1_total": 201,
+    "l1_total": 202,
     "l1_expired": 0,
     "effectiveness": "low"
   },
@@ -114,16 +114,16 @@
     {
       "level": "warning",
       "code": "L0_EMBEDDING_INCOMPLETE",
-      "message": "L0 向量完整率 99.0%（缺失 173 条）",
-      "value": 99.0,
+      "message": "L0 向量完整率 98.8%（缺失 210 条）",
+      "value": 98.8,
       "threshold": 99.0,
-      "timestamp": "2026-06-24T03:22:13+08:00"
+      "timestamp": "2026-06-24T03:29:24+08:00"
     },
     {
       "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-24T03:22:13+08:00"
+      "timestamp": "2026-06-24T03:29:24+08:00"
     }
   ]
 }
