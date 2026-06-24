@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "generated_at": "2026-06-24T10:21:43+08:00",
+    "lcm_db_size_mb": 441.13,
+    "lcm_db_path_hash": "sha256:abcd3901d43ea8a4c6a5d4a8b6739be615312cca09f2807e9cabbe33e2b35a02",
+    "schema_version": "1.0"
+  },
+  "overview": {
+    "total_conversations": 93,
+    "active_conversations": 41,
+    "archived_conversations": 52,
+    "total_messages": 41784,
+    "total_summaries": 772,
+    "leaf_summaries": 745,
+    "condensed_summaries": 27,
+    "storage_size_mb": 441.13,
+    "last_archive_days_ago": 0,
+    "wal_size_mb": 5.9
+  },
+  "agent_distribution": [
+    {
+      "agent": "geek",
+      "active": 14,
+      "archived": 24,
+      "messages": 18076
+    },
+    {
+      "agent": "main",
+      "active": 16,
+      "archived": 17,
+      "messages": 10904
+    },
+    {
+      "agent": "coding",
+      "active": 8,
+      "archived": 7,
+      "messages": 10863
+    },
+    {
+      "agent": "netops",
+      "active": 2,
+      "archived": 3,
+      "messages": 971
+    },
+    {
+      "agent": "homelab",
+      "active": 1,
+      "archived": 1,
+      "messages": 970
+    }
+  ],
+  "session_key_patterns": [
+    {
+      "pattern": "agent:*:dashboard:*",
+      "count": 52,
+      "active": 26
+    },
+    {
+      "pattern": "agent:*:main",
+      "count": 11,
+      "active": 5
+    },
+    {
+      "pattern": "agent:*:web*",
+      "count": 10,
+      "active": 0,
+      "note": "全部已归档"
+    },
+    {
+      "pattern": "agent:*:ha-anomaly",
+      "count": 2,
+      "active": 1
+    },
+    {
+      "pattern": "agentroom:*",
+      "count": 0,
+      "active": null
+    },
+    {
+      "pattern": "agent:homelab:*",
+      "count": 2,
+      "active": 1
+    }
+  ],
+  "message_trend_30d": [
+    {
+      "date": "2026-05-27",
+      "count": 430,
+      "size_mb": 0.58
+    },
+    {
+      "date": "2026-06-02",
+      "count": 135,
+      "size_mb": 0.58
+    },
+    {
+      "date": "2026-06-05",
+      "count": 52,
+      "size_mb": 0.07
+    },
+    {
+      "date": "2026-06-08",
+      "count": 515,
+      "size_mb": 2.08
+    },
+    {
+      "date": "2026-06-09",
+      "count": 943,
+      "size_mb": 1.46
+    },
+    {
+      "date": "2026-06-10",
+      "count": 138,
+      "size_mb": 0.17
+    },
+    {
+      "date": "2026-06-11",
+      "count": 13,
+      "size_mb": 0.02
+    },
+    {
+      "date": "2026-06-12",
+      "count": 1028,
+      "size_mb": 2.12
+    },
+    {
+      "date": "2026-06-14",
+      "count": 940,
+      "size_mb": 1.08
+    },
+    {
+      "date": "2026-06-16",
+      "count": 3712,
+      "size_mb": 7.56
+    },
+    {
+      "date": "2026-06-17",
+      "count": 2263,
+      "size_mb": 6.09
+    },
+    {
+      "date": "2026-06-18",
+      "count": 4383,
+      "size_mb": 9.49
+    },
+    {
+      "date": "2026-06-19",
+      "count": 4306,
+      "size_mb": 8.83
+    },
+    {
+      "date": "2026-06-20",
+      "count": 1431,
+      "size_mb": 2.9
+    },
+    {
+      "date": "2026-06-22",
+      "count": 5404,
+      "size_mb": 12.46
+    },
+    {
+      "date": "2026-06-23",
+      "count": 3444,
+      "size_mb": 6.67
+    },
+    {
+      "date": "2026-06-24",
+      "count": 885,
+      "size_mb": 1.72
+    }
+  ],
+  "backup_status": {
+    "total_size_mb": 0.0,
+    "files": []
+  },
+  "health_alerts": [
+    {
+      "level": "info",
+      "code": "WAL_OK",
+      "message": "WAL 文件大小正常 (5.9 MB)",
+      "timestamp": "2026-06-24T10:21:43+08:00"
+    },
+    {
+      "level": "success",
+      "code": "ARCHIVE_FRESH",
+      "message": "今日已有归档记录",
+      "timestamp": "2026-06-24T10:21:43+08:00"
+    }
+  ]
+}

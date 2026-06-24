@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LCM Memory Dashboard · Private Dashboard</title>
+  <meta name="description" content="LCM（Lossless-Claw）记忆系统健康仪表板。每日 02:00 自动刷新，仅导出脱敏聚合数据。">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+
+  <!-- Apple Web App -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Chart.js v4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./assets/css/dashboard.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ── Sticky Header ─────────────────────────────────── -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="breadcrumb">
+          <a href="../">Private Dashboard</a>
+          <span class="sep">›</span>
+        </div>
+        <h1>LCM Memory</h1>
+      </div>
+      <div class="header-right">
+        <span class="updated-at" id="header-updated">加载中…</span>
+        <span class="db-size" id="header-dbsize">— DB</span>
+      </div>
+    </header>
+
+    <!-- ── Main Content (filled by JS) ──────────────────── -->
+    <main class="app-main" id="app-main">
+      <!-- Skeleton shown during load; replaced by renderDashboard() -->
+      <div style="display:flex;align-items:center;justify-content:center;height:60vh;color:var(--fg-tertiary)">
+        <span>正在加载…</span>
+      </div>
+    </main>
+
+    <!-- ── Footer ─────────────────────────────────────────── -->
+    <footer class="app-footer">
+      <span>
+        LCM Memory Dashboard ·
+        仅显示脱敏聚合数据 ·
+        <a href="../docs/DESIGN_TOKENS.md" target="_blank">设计规范</a> ·
+        <a href="../lcm/docs/DATA_SCHEMA.md" target="_blank">数据 Schema</a>
+      </span>
+      <span>
+        由 <a href="https://github.com/yrwd999" target="_blank">yrwd999</a> 维护
+        · <a href="https://github.com/yrwd999/private-dashboard" target="_blank">GitHub</a>
+      </span>
+    </footer>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script src="./assets/js/dashboard.js"></script>
+</body>
+</html>
