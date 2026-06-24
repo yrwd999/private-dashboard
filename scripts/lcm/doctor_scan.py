@@ -381,7 +381,7 @@ def main() -> int:
     report = {
         "generated_at": ts(),
         "task": "lcm-doctor-scan",
-        "db_path": str(DB_PATH),
+        "db_path": str(DB_PATH.relative_to(Path.home())),  # sanitized — no /home/username/
         "db_size_mb": round(DB_PATH.stat().st_size / 1024 / 1024, 2),
         "summary_checks": [],
         "conversation_checks": [],

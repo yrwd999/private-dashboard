@@ -70,7 +70,7 @@ def find_bak_files() -> list[dict]:
         size_mb = f.stat().st_size / 1024 / 1024
 
         results.append({
-            "path": str(f),
+            "path": str(f).replace(str(Path.home()), "~"),
             "name": f.name,
             "age_days": age_days,
             "size_mb": round(size_mb, 3),

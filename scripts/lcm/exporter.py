@@ -498,7 +498,7 @@ def main() -> int:
             "executed_at": now_iso(),
             "task": "lcm-daily-snapshot",
             "operation": "export",
-            "source": str(args.db_path),
+            "source": str(args.db_path).replace(str(Path.home()), "~"),  # sanitized
             "output": [str(p) for p in written],
             "result": "success",
             "duration_ms": duration_ms,

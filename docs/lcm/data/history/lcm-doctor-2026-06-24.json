@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-06-24T11:27:05.229030+08:00",
   "task": "lcm-doctor-scan",
-  "db_path": "/home/yrwd999/.openclaw/lcm.db",
+  "db_path": "~/.openclaw/lcm.db",
   "db_size_mb": 441.13,
   "summary_checks": [
     {

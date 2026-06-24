@@ -27,6 +27,15 @@ REPO_DIR = Path(os.environ.get("LCM_REPO_DIR", "/mnt/github/private-dashboard"))
 HISTORY_DIR = REPO_DIR / "docs" / "lcm" / "data" / "history"
 DB_PATH = Path(os.environ.get("LCM_DB_PATH", "~/.openclaw/lcm.db")).expanduser()
 
+
+def sha256_prefix(s: str, length: int = 12) -> str:
+    """Hash a string and return the first N chars with sha256: prefix."""
+    import hashlib
+    h = hashlib.sha256()
+    h.update(s.encode("utf-8"))
+    return f"sha256:{h.hexdigest()[:length]}"
+
+
 # ── Threshold (#7: env var 优先) ─────────────────────────────────────────
 ARCHIVE_THRESHOLD_DAYS = int(os.environ.get("WEB_ARCHIVE_THRESHOLD_DAYS", "3"))
 
@@ -97,7 +106,7 @@ def get_web_sessions(conn: sqlite3.Connection, threshold_days: int) -> list[dict
 
         results.append({
             "conversation_id": row[0],
-            "session_key": row[1],
+            "session_key": sha256_prefix(row[1]),  # sanitized — never raw
             "title": row[2],
             "active": row[3],
             "updated_at": updated_at_str,
