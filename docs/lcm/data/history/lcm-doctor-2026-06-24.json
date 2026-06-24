@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T11:06:50.229351+08:00",
+  "generated_at": "2026-06-24T11:27:05.229030+08:00",
   "task": "lcm-doctor-scan",
   "db_path": "/home/yrwd999/.openclaw/lcm.db",
   "db_size_mb": 441.13,
@@ -31,9 +31,9 @@
     {
       "check": "summary_stats",
       "passed": true,
-      "total": 781,
+      "total": 788,
       "distinct_conversations": 42,
-      "message": "781 summaries across 42 conversations"
+      "message": "788 summaries across 42 conversations"
     }
   ],
   "conversation_checks": [
@@ -81,10 +81,10 @@
     {
       "check": "message_stats",
       "passed": true,
-      "total": 42303,
+      "total": 42590,
       "oldest_message": "2026-04-24 08:13:38",
-      "newest_message": "2026-06-24 03:06:44",
-      "message": "42303 messages (2026-04-24 08:13:38 → 2026-06-24 03:06:44)"
+      "newest_message": "2026-06-24 03:26:57",
+      "message": "42590 messages (2026-04-24 08:13:38 → 2026-06-24 03:26:57)"
     }
   ],
   "wal_checks": [

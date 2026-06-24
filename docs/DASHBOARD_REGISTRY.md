@@ -10,7 +10,7 @@
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务（见下） |
-| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 📋 规划中 | `~/.openclaw/memory-tdai/vectors.db` | 每日 03:00 + 每小时半点 |
+| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 🚧 开发中 | `~/.openclaw/memory-tdai/vectors.db` | 待创建 |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 
@@ -20,11 +20,11 @@
 
 | # | 任务名 | Cron | 脚本 | 产出文件 | 类型 |
 |---|--------|------|------|---------|------|
-| 1 | `lcm-daily-snapshot` | 每日 02:00 | `scripts/exporter_lcm.py` | `latest.json` + `history/YYYY-MM-DD.json` | 数据导出 |
-| 2 | `lcm-wal-health` | 每日 03:00 | `scripts/wal_health_check.py` | `wal_health.json` | 诊断 |
-| 3 | `lcm-doctor-scan` | 每周六 02:00 | `scripts/doctor_scan.py` | `history/lcm-doctor-YYYY-MM-DD.json` | 只读诊断 |
-| 4 | `lcm-web-archive` | 每月 1日 03:00 | `scripts/web_archive.py` | `history/lcm-web-archive-YYYY-MM-DD.json` | 归档（destructive） |
-| 5 | `lcm-backup-cleanup` | 每月 1日 04:00 | `scripts/backup_cleanup.py` | `history/lcm-backup-cleanup-YYYY-MM-DD.json` | 清理（destructive） |
+| 1 | `lcm-daily-snapshot` | 每日 02:00 | `scripts/lcm/exporter.py` | `latest.json` + `history/YYYY-MM-DD.json` | 数据导出 |
+| 2 | `lcm-wal-health` | 每日 03:00 | `scripts/lcm/wal_health_check.py` | `wal_health.json` | 诊断 |
+| 3 | `lcm-doctor-scan` | 每周六 02:00 | `scripts/lcm/doctor_scan.py` | `history/lcm-doctor-YYYY-MM-DD.json` | 只读诊断 |
+| 4 | `lcm-web-archive` | 每月 1日 03:00 | `scripts/lcm/web_archive.py` | `history/lcm-web-archive-YYYY-MM-DD.json` | 归档（destructive） |
+| 5 | `lcm-backup-cleanup` | 每月 1日 04:00 | `scripts/lcm/backup_cleanup.py` | `history/lcm-backup-cleanup-YYYY-MM-DD.json` | 清理（destructive） |
 
 **阈值配置（环境变量）：**
 
@@ -40,6 +40,9 @@
 | | `CLEANUP_RECENT_PROTECTION_DAYS` | `30` | 最近 N 天内即使满足也保护 |
 | 所有脚本 | `LCM_DB_PATH` | `~/.openclaw/lcm.db` | 数据库路径 |
 | | `LCM_REPO_DIR` | `/mnt/github/private-dashboard` | 仓库路径 |
+
+> 路径前缀已更新：所有 LCM 脚本现位于 `scripts/lcm/` 下。
+> cron job payload 中的调用路径同步更新为完整路径。
 
 > 在 cron job payload 中通过环境变量注入自定义阈值，例如：
 > `WAL_THRESHOLD_RATIO=0.05 python3 scripts/wal_health_check.py`
@@ -95,9 +98,9 @@ docs/{id}/                    ← GitHub Pages 路径（/{id}/ 出现在 URL 中
 - [ ] 编写 `docs/{id}/docs/SECURITY.md`（脱敏策略）
 
 ### Phase 2：Exporter 脚本
-- [ ] 编写 `scripts/exporter-{id}-spec.md`（只写规格，**不写代码**）
-- [ ] 实现 `scripts/exporter_{id}.py`（遵循规格）
-- [ ] 运行 dry-run 验证：`python3 scripts/exporter_{id}.py --dry-run`
+- [ ] 编写 `docs/{id}/docs/exporter-{id}-spec.md`（只写规格，**不写代码**）
+- [ ] 实现 `scripts/{id}/exporter.py`（遵循规格，参考 `scripts/lcm/exporter.py`）
+- [ ] 运行 dry-run 验证：`python3 scripts/{id}/exporter.py --dry-run --output-dir ./docs/{id}/data`
 
 ### Phase 3：Dashboard 前端
 - [ ] 实现 `docs/{id}/index.html`（复用 `DESIGN_TOKENS.md`）

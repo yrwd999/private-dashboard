@@ -1,4 +1,5 @@
 # Private Dashboard — Engineering Specification
+
 > 内部工程规范文档 · 本文件**不在 GitHub Pages 上对外暴露**
 > 部署：GitHub Pages（source: `/docs/`）· Dashboard 访问：`https://yrwd999.github.io/private-dashboard/docs/{id}/`
 
@@ -29,17 +30,10 @@
 
 | 机制 | 实现方式 | 说明 |
 |------|----------|------|
-| **时间分片** | 每个 dashboard cron 在不同分钟执行 | 默认错开 30min，如 LCM=02:00, Homelab=02:30 |
-| **锁文件** | `scripts/.push-lock/{dashboard-id}.lock` | 持锁执行 git push，锁文件不过期（crash 后下次覆盖） |
+| **时间分片** | 每个 dashboard cron 在不同分钟执行 | 默认错开 30min，如 LCM=02:00, memory-tdai=02:30 |
+| **锁文件** | `.push-locks/{dashboard-id}.lock` | 持锁执行 git push，锁文件不过期（crash 后下次覆盖） |
 | **重试** | cron job failureAlert 不包含 git retry | 失败后下次定时自然重试，不堆积 |
 | **目录隔离** | 每个 dashboard 数据在独立子目录 | `docs/{id}/data/` 互不覆盖，git add 仅针对各自目录 |
-
-**git push 原子性保证：**
-```
-cron_job_exporter → git add docs/{id}/data/ → git commit → git push
-                                           ↑ 若 push 失败 → failureAlert 通知
-```
-不涉及多 dashboard 竞争同一文件的场景（各自数据在各自目录）。
 
 ---
 
@@ -48,15 +42,12 @@ cron_job_exporter → git add docs/{id}/data/ → git commit → git push
 ```
 private-dashboard/                     ← GitHub Pages source = /docs/
 ├── README.md                          ← 本文件（内部规范，不在 Pages 上暴露）
-├── SPEC.md                            ← 架构设计文档（本文档，副本）
-├── CHANGELOG.md                       ← 仓库级变更记录
 ├── .gitignore
 │
 ├── docs/                              ← ⚠️ GitHub Pages source（从此目录对外服务）
-│   │
 │   ├── README.md                      ← 公开入口页（GitHub Pages 根 URL）
-│   ├── DESIGN_TOKENS.md               ← 全局设计 token（Apple HIG 规范）
-│   ├── DASHBOARD_REGISTRY.md          ← Dashboard 模块注册表
+│   ├── DESIGN_TOKENS.md              ← 全局设计 token（Apple HIG 规范）
+│   ├── DASHBOARD_REGISTRY.md          ← Dashboard 模块注册表（必读）
 │   │
 │   ├── lcm/                          ← LCM Memory Dashboard
 │   │   ├── index.html                 ← Dashboard 入口（Apple HIG 风格）
@@ -64,13 +55,20 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 │   │   │   ├── css/dashboard.css
 │   │   │   └── js/dashboard.js
 │   │   ├── data/
-│   │   │   ├── latest.json            ← 每日覆盖（cron 自动更新）
-│   │   │   └── history/               ← 30 天滚动快照
+│   │   │   ├── latest.json           ← 每日覆盖（cron 自动更新）
+│   │   │   └── history/              ← 30 天滚动快照
 │   │   │       └── YYYY-MM-DD.json
 │   │   └── docs/                     ← LCM 专属规格
 │   │       ├── DESIGN.md
 │   │       ├── DATA_SCHEMA.md
-│   │       └── SECURITY.md
+│   │       ├── SECURITY.md
+│   │       └── exporter-lcm-spec.md  ← Exporter 实现规格
+│   │
+│   ├── memory-tdai/                  ← Memory-TDAI Dashboard（🚧 开发中）
+│   │   ├── index.html
+│   │   ├── assets/
+│   │   ├── data/
+│   │   └── docs/
 │   │
 │   ├── homelab/                      ← （预留）Homelab Dashboard
 │   │   └── docs/
@@ -79,12 +77,19 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 │       └── docs/
 │
 └── scripts/                           ← 内部工具（不在 GitHub Pages 上）
-    ├── exporter_lcm.py               ← LCM 数据导出脚本
-    ├── exporter_lcm_spec.md          ← LCM exporter 规格（不写实现代码）
-    ├── tests/
-    │   └── test_exporter_lcm.py
-    └── README.md
-
+    ├── lcm/                          ← LCM 脚本组
+    │   ├── exporter.py               ← 主导出器
+    │   ├── wal_health_check.py       ← WAL 健康诊断
+    │   ├── doctor_scan.py            ← 每周只读诊断
+    │   ├── web_archive.py            ← Web Session 归档
+    │   ├── backup_cleanup.py         ← 备份文件清理
+    │   ├── README.md                 ← LCM 脚本使用文档
+    │   └── tests/
+    │       └── test_exporter.py      ← Exporter 测试套件
+    ├── memory-tdai/                  ← memory-tdai 脚本组（🚧 开发中）
+    │   ├── exporter.py
+    │   └── README.md
+    └── README.md                     ← 脚本目录总览（本文件）
 ```
 
 **URL 映射：**
@@ -106,13 +111,6 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 | 长度 | 2~20 字符 | — |
 | 唯一性 | 全仓库唯一 | — |
 | 语义化 | 与业务 domain 对应 | `lcm`=记忆系统, `homelab`=智能家居 |
-
-### GitHub Pages URL 规则
-
-```
-https://yrwd999.github.io/private-dashboard/docs/{id}/
-                           ↑ "docs" 是 GitHub Pages source 目录名，固定不变
-```
 
 ### 文件命名（强制）
 
@@ -145,45 +143,6 @@ Cron job 流程（自动）：
   main ──push──→ origin/main （触发 Pages rebuild）
 ```
 
-### Cron Job 提交流程
-
-```bash
-# 伪代码：每个 dashboard cron job 的 git 操作
-cd /mnt/github/private-dashboard
-
-git fetch origin main
-# 若本地 main 落后远程 origin/main，先 pull --rebase
-if [[ $(git rev-parse HEAD) != $(git rev-parse origin/main) ]]; then
-    git rebase origin/main
-fi
-
-# 运行 exporter
-python3 scripts/exporter_{id}.py --output-dir docs/{id}/data
-
-# git add 仅针对本 dashboard 的数据目录
-git add docs/{id}/data/latest.json docs/{id}/data/history/
-git commit -m "[{id}] auto-update $(date +%Y-%m-%d)"
-git push origin main
-```
-
-### 锁文件机制（防并发）
-
-```bash
-LOCK_DIR=".push-locks"
-LOCK_FILE="$LOCK_DIR/{id}.lock"
-
-mkdir -p "$LOCK_DIR"
-if ln "$LOCK_FILE" "$LOCK_FILE" 2>/dev/null; then
-    # 持锁成功，执行 git push
-    trap "rm -f '$LOCK_FILE'" EXIT
-else
-    # 已有锁，退出（下次 cron 自然重试）
-    exit 0
-fi
-```
-
-> 注：ln 原子性保证即使进程 crash，锁文件也会在下下次执行时被覆盖。
-
 ---
 
 ## ⏰ Cron 任务调度
@@ -197,11 +156,14 @@ fi
 
 ### 当前任务表
 
-| 任务名 | Dashboard | 执行时间 | 上次状态 |
+| 任务名 | Dashboard | 脚本路径 | 执行时间 |
 |--------|-----------|----------|----------|
-| `lcm-daily-snapshot` | LCM Memory | 每日 02:00 | ✅ 已创建 |
-| （预留） | Homelab | 每日 02:30 | — |
-| （预留） | Network | 每日 03:00 | — |
+| `lcm-daily-snapshot` | LCM Memory | `scripts/lcm/exporter.py` | 每日 02:00 |
+| `lcm-wal-health` | LCM Memory | `scripts/lcm/wal_health_check.py` | 每日 03:00 |
+| `lcm-doctor-scan` | LCM Memory | `scripts/lcm/doctor_scan.py` | 每周六 02:00 |
+| `lcm-web-archive` | LCM Memory | `scripts/lcm/web_archive.py` | 每月 1日 03:00 |
+| `lcm-backup-cleanup` | LCM Memory | `scripts/lcm/backup_cleanup.py` | 每月 1日 04:00 |
+| （预留） | memory-tdai | `scripts/memory-tdai/exporter.py` | 每日 02:30 |
 
 ### Cron Payload 模板
 
@@ -209,25 +171,31 @@ fi
 name: {id}-daily-snapshot
 schedule:
   kind: cron
-  expr: "{minute} {hour} * * *"   # 例：0 2 = 02:00
+  expr: "{minute} {hour} * * *"
   tz: "Asia/Shanghai"
 sessionTarget: isolated
 payload:
   kind: agentTurn
   message: |
-    执行 {id} Dashboard 每日数据导出：
+    执行 {id} Dashboard 每日数据导出任务：
+
+    # REPO: /mnt/github/private-dashboard
+    # 数据源: ~/.openclaw/{db_path}
 
     1. 持锁（防止并发 push）
     2. 运行数据导出：
-       python3 /mnt/github/private-dashboard/scripts/exporter_{id}.py \
+       python3 /mnt/github/private-dashboard/scripts/{id}/exporter.py \
          --db-path ~/.openclaw/{db_path} \
          --output-dir /mnt/github/private-dashboard/docs/{id}/data
+
     3. 若成功，提交 Git：
        cd /mnt/github/private-dashboard
        git add docs/{id}/data/latest.json docs/{id}/data/history/
        git commit -m "[{id}] auto-update $(date +%Y-%m-%d)"
        git push origin main
+
     4. 若失败，静默退出（failureAlert 会通知 Ray）
+
   timeoutSeconds: 180
 delivery:
   mode: none
@@ -239,17 +207,31 @@ failureAlert:
   mode: announce
 ```
 
+> **注意**：每个 dashboard 模块下可能有多个脚本（不只有 exporter）。详见 `scripts/{id}/README.md`。
+> 例如 LCM 有 5 个 cron 任务，分布在 `scripts/lcm/` 下的不同脚本。
+
 ---
 
 ## 🚀 新增 Dashboard 流程
 
+### 目录结构规范
+
+每个 dashboard 必须同时在 `docs/` 和 `scripts/` 下建立对应目录：
+
+```
+docs/{new-id}/           ← GitHub Pages 可访问
+scripts/{new-id}/        ← 内部工具（不对外暴露）
+```
+
 ### 检查清单（按顺序执行）
 
 - [ ] **1. 在 `docs/DASHBOARD_REGISTRY.md` 添加记录**（先登记，再开发）
+
 - [ ] **2. 创建目录骨架**
 
 ```bash
 mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
+mkdir -p scripts/{new-id}
 ```
 
 - [ ] **3. 编写三份规格文档**（在 `docs/{new-id}/docs/` 下）
@@ -257,13 +239,14 @@ mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
   - `DATA_SCHEMA.md`：导出的 JSON schema
   - `SECURITY.md`：数据脱敏策略、禁止导出的字段列表
 
-- [ ] **4. 编写 exporter 规格**（`scripts/exporter-{new-id}-spec.md`）
+- [ ] **4. 编写 exporter 规格**（`docs/{new-id}/docs/exporter-{new-id}-spec.md`）
   - 只写规格，**不写实现代码**
   - 定义 SQL 查询逻辑、输出字段、安全约束
 
-- [ ] **5. 实现 exporter 脚本**（`scripts/exporter_{new-id}.py`）
-  - 遵循规格，可复用 `scripts/exporter_lcm.py` 的模式
-  - 通过 `scripts/exporter_{new-id}_spec.md` 验证
+- [ ] **5. 实现 exporter 脚本**（`scripts/{new-id}/exporter.py`）
+  - 遵循规格，可复用 `scripts/lcm/exporter.py` 的模式
+  - 通过 `docs/{new-id}/docs/exporter-{new-id}-spec.md` 验证
+  - 参考 `scripts/lcm/README.md` 了解脚本规范
 
 - [ ] **6. 编写 Dashboard HTML**（`docs/{new-id}/index.html`）
   - 复用 `docs/DESIGN_TOKENS.md` 全局 token
@@ -271,20 +254,25 @@ mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
 
 - [ ] **7. 本地验证**
   ```bash
-  python3 scripts/exporter_{new-id}.py --dry-run
-  # 或启动本地 http server
+  # 验证脚本语法
+  python3 -m py_compile scripts/{new-id}/exporter.py
+
+  # Dry-run 测试
+  python3 scripts/{new-id}/exporter.py --dry-run --output-dir /tmp/{new-id}/
+
+  # 启动本地 HTTP server 预览 dashboard
   python3 -m http.server 8000 --directory /mnt/github/private-dashboard
   # 访问 http://localhost:8000/docs/{new-id}/
   ```
 
 - [ ] **8. Commit 并推送**
   ```bash
-  git add docs/{new-id}/ scripts/exporter-{new-id}*
+  git add docs/{new-id}/ scripts/{new-id}/
   git commit -m "feat({new-id}): initial dashboard scaffold"
   git push origin main
   ```
 
-- [ ] **9. 创建 cron 任务**（参照上方模板）
+- [ ] **9. 创建 cron 任务**（参照上方模板，注意脚本路径 `scripts/{new-id}/exporter.py`）
 - [ ] **10. 更新 `docs/DASHBOARD_REGISTRY.md`** 状态为 ✅
 
 ---
@@ -311,20 +299,6 @@ mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
 - **仓库内零凭据**：无 GitHub token、无 HA URL、无 SSH key
 - **凭据在 OpenClaw 本地**：`~/.openclaw/secrets.json` 或 env var
 - **Exporter 连接数据库**：本地 read-only SQLite，不走网络
-
-### 安全审计
-
-每次 export 在 `latest.json` 中记录：
-```json
-{
-  "executed_at": "ISO-8601",
-  "security_scan": {
-    "forbidden_fields_blocked": 0,
-    "token_patterns_found": 0,
-    "large_content_excluded": 0
-  }
-}
-```
 
 ---
 
@@ -353,7 +327,8 @@ mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
 
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
-| `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 每日 02:00 |
+| `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务 |
+| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 🚧 开发中 | `~/.openclaw/memory-tdai/` | 1 个 cron（待创建） |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 
@@ -365,3 +340,4 @@ mkdir -p docs/{new-id}/{assets/{css,js},data/history,docs}
 |------|------|
 | 2026-06-24 | 仓库创建 · LCM Phase 1~4 落地 |
 | 2026-06-24 | 确立 Strategy A Monorepo 架构 · 本规范写入 README |
+| 2026-06-24 | scripts/ 重构为模块化目录（`scripts/{id}/`），解决多 dashboard 扩展问题 |
