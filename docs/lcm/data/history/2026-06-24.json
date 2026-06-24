@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-24T10:21:43+08:00",
+    "generated_at": "2026-06-24T10:35:49+08:00",
     "lcm_db_size_mb": 441.13,
     "lcm_db_path_hash": "sha256:abcd3901d43ea8a4c6a5d4a8b6739be615312cca09f2807e9cabbe33e2b35a02",
     "schema_version": "1.0"
@@ -9,9 +9,9 @@
     "total_conversations": 93,
     "active_conversations": 41,
     "archived_conversations": 52,
-    "total_messages": 41784,
-    "total_summaries": 772,
-    "leaf_summaries": 745,
+    "total_messages": 41960,
+    "total_summaries": 776,
+    "leaf_summaries": 749,
     "condensed_summaries": 27,
     "storage_size_mb": 441.13,
     "last_archive_days_ago": 0,
@@ -28,7 +28,7 @@
       "agent": "main",
       "active": 16,
       "archived": 17,
-      "messages": 10904
+      "messages": 11080
     },
     {
       "agent": "coding",
@@ -165,8 +165,8 @@
     },
     {
       "date": "2026-06-24",
-      "count": 885,
-      "size_mb": 1.72
+      "count": 1061,
+      "size_mb": 2.06
     }
   ],
   "backup_status": {
@@ -178,13 +178,13 @@
       "level": "info",
       "code": "WAL_OK",
       "message": "WAL 文件大小正常 (5.9 MB)",
-      "timestamp": "2026-06-24T10:21:43+08:00"
+      "timestamp": "2026-06-24T10:35:49+08:00"
     },
     {
       "level": "success",
       "code": "ARCHIVE_FRESH",
       "message": "今日已有归档记录",
-      "timestamp": "2026-06-24T10:21:43+08:00"
+      "timestamp": "2026-06-24T10:35:49+08:00"
     }
   ]
 }
