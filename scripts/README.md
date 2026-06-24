@@ -26,7 +26,8 @@ scripts/
 │   ├── fix_missing_embeddings.py ← memory-tdai-hourly-repair cron 调用
 │   └── README.md
 │
-└── README.md      ← 本文件
+├── security_scan.py     ← 全仓库安全扫描器（必读：每次 commit 前必跑）
+└── README.md            ← 本文件
 ```
 
 ---
@@ -93,6 +94,33 @@ scripts/
 
 ---
 
+## 🔒 提交前安全检查（强制）
+
+**每次 commit 前必须执行**，尤其涉及 JSON 数据文件或 Python 脚本时：
+
+```bash
+# 方式 1：扫描所有数据文件（推荐）
+python3 scripts/security_scan.py
+
+# 方式 2：仅扫描暂存文件
+python3 scripts/security_scan.py --staged
+
+# 方式 3：扫描指定文件
+python3 scripts/security_scan.py --files docs/lcm/data/latest.json
+
+# CI / 严格模式：发现违规即 exit 1
+python3 scripts/security_scan.py --strict
+```
+
+**违规类型覆盖**：
+- 🔴 CRITICAL：session_key 明文、GitHub/OpenAI Token、message.content 泄漏
+- 🟠 HIGH：绝对路径（/home/）、JWT Token、HA Token
+- 🟡 MEDIUM：手机号、邮箱、内网 IP
+
+**严格模式失败** → 必须修复后再 commit。详见 [`../SECURITY.md`](../SECURITY.md)。
+
+---
+
 ## 🔧 本地测试
 
 ```bash
@@ -114,6 +142,23 @@ python3 scripts/lcm/tests/test_exporter.py
 2. 在对应 cron job 的 `message` 中引用完整路径：`python3 /mnt/github/private-dashboard/scripts/{id}/{script}.py`
 3. 如脚本有 cron 任务，更新 `docs/DASHBOARD_REGISTRY.md` 的 cron 任务表
 4. 更新 `scripts/{id}/README.md`
+5. **提交前**：运行 `python3 scripts/security_scan.py --staged` 确认无违规
+
+---
+
+## 🛡️ 安全规范（必读）
+
+所有脚本和 JSON 输出文件必须遵循：
+
+| 规则 | 说明 | 违规级别 |
+|------|------|---------|
+| 禁止绝对路径 | JSON 中路径必须用 `~` 或相对路径 | HIGH |
+| 禁止 session_key 明文 | 必须用 `sha256:xxx` 前缀 | CRITICAL |
+| 禁止 message.content | 禁止导出任何对话内容 | CRITICAL |
+| 禁止 API Token | `ghp_`、`sk-`、`eyJ` 等 | CRITICAL |
+| 禁止 PII | 手机号、邮箱、身份证 | MEDIUM |
+
+完整规范 → [`../SECURITY.md`](../SECURITY.md)
 
 ---
 

@@ -279,6 +279,8 @@ mkdir -p scripts/{new-id}
 
 ## 🔒 安全模型
 
+> ⚠️ **完整规范**：所有人均等必须遵循 [SECURITY.md](./SECURITY.md)
+
 ### 数据导出约束（强制）
 
 **禁止导出（全部在 exporter 脚本层拦截）：**
@@ -299,6 +301,18 @@ mkdir -p scripts/{new-id}
 - **仓库内零凭据**：无 GitHub token、无 HA URL、无 SSH key
 - **凭据在 OpenClaw 本地**：`~/.openclaw/secrets.json` 或 env var
 - **Exporter 连接数据库**：本地 read-only SQLite，不走网络
+
+### 提交前检查（强制）
+
+每次 commit 前必须运行：
+```bash
+python3 scripts/security_scan.py --staged
+```
+严格模式（CI）：
+```bash
+python3 scripts/security_scan.py --strict
+```
+详见 [SECURITY.md](./SECURITY.md) § 提交前安全检查清单。
 
 ---
 
@@ -340,3 +354,6 @@ mkdir -p scripts/{new-id}
 | 2026-06-24 | 仓库创建 · LCM Phase 1~4 落地 |
 | 2026-06-24 | 确立 Strategy A Monorepo 架构 · 本规范写入 README |
 | 2026-06-24 | scripts/ 重构为模块化目录（`scripts/{id}/`），解决多 dashboard 扩展问题 |
+| 2026-06-24 | 全仓库安全审计：发现并修复 4 个脚本绝对路径/session_key 泄漏问题 |
+| 2026-06-24 | 落地 SECURITY.md 安全策略 + scripts/security_scan.py 扫描器 |
+| 2026-06-24 | scripts/README.md 新增提交前安全检查清单 |
