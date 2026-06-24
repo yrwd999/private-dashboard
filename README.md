@@ -163,7 +163,8 @@ Cron job 流程（自动）：
 | `lcm-doctor-scan` | LCM Memory | `scripts/lcm/doctor_scan.py` | 每周六 02:00 |
 | `lcm-web-archive` | LCM Memory | `scripts/lcm/web_archive.py` | 每月 1日 03:00 |
 | `lcm-backup-cleanup` | LCM Memory | `scripts/lcm/backup_cleanup.py` | 每月 1日 04:00 |
-| （预留） | memory-tdai | `scripts/memory-tdai/exporter.py` | 每日 02:30 |
+| `memory-tdai-daily-export` | memory-tdai | `scripts/memory-tdai/exporter.py` | 每日 03:00 |
+| `memory-tdai-hourly-repair` | memory-tdai | `scripts/memory-tdai/fix_missing_embeddings.py` | 每小时 :30 |
 
 ### Cron Payload 模板
 
@@ -328,7 +329,7 @@ mkdir -p scripts/{new-id}
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务 |
-| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 🚧 开发中 | `~/.openclaw/memory-tdai/` | 1 个 cron（待创建） |
+| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | ✅ 运行中 | `~/.openclaw/memory-tdai/vectors.db` | 2 个 cron（每日 03:00 + 每小时 :30） |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 

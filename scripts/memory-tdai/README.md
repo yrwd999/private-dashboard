@@ -1,6 +1,6 @@
 # Memory-TDAI Exporter
 
-> 维护者：Ray | 状态：开发中
+> 维护者：Ray | 状态：✅ 运行中
 
 ## 脚本列表
 

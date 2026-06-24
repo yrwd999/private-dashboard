@@ -21,8 +21,9 @@ scripts/
 │   └── tests/
 │       └── test_exporter.py ← Exporter 单元测试套件
 │
-├── memory-tdai/   ← memory-tdai Dashboard 工具集（🚧 开发中）
-│   ├── exporter.py
+├── memory-tdai/   ← memory-tdai Dashboard 工具集
+│   ├── exporter.py               ← memory-tdai-daily-export cron 调用
+│   ├── fix_missing_embeddings.py ← memory-tdai-hourly-repair cron 调用
 │   └── README.md
 │
 └── README.md      ← 本文件
@@ -88,7 +89,7 @@ scripts/
 
 ### memory-tdai（`scripts/memory-tdai/`）
 
-🚧 开发中。详见 [`memory-tdai/README.md`](./memory-tdai/README.md)
+✅ 运行中。详见 [`memory-tdai/README.md`](./memory-tdai/README.md)
 
 ---
 
