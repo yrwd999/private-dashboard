@@ -201,7 +201,7 @@ delivery:
   mode: none
 failureAlert:
   after: 1
-  channel: telegram
+  channel: openclaw-weixin
   to: "8130748132"
   cooldownMs: 3600000
   mode: announce

@@ -147,14 +147,14 @@ stat ~/.openclaw/memory-tdai/persona.md
 
 ### 输出文件 1: `data/latest.json`
 
-由 `scripts/exporter_memory_tdai.py` 写入：
+由 `scripts/memory-tdai/exporter.py` 写入：
 ```
 docs/memory-tdai/data/latest.json
 ```
 
 ### 输出文件 2: `data/history/YYYY-MM-DD.json`
 
-由 `scripts/exporter_memory_tdai.py` 写入：
+由 `scripts/memory-tdai/exporter.py` 写入：
 ```
 docs/memory-tdai/data/history/YYYY-MM-DD.json
 ```
@@ -244,7 +244,7 @@ hashlib（标准库）
   "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
-    "message": "执行 memory-tdai 每日健康快照 exporter。\n\n参考规格：scripts/exporter-memory-tdai-spec.md\n参考代码：scripts/exporter_memory_tdai.py（待实现）\n\n如果 exporter 还不存在，先实现它（dry-run 验证），然后执行导出。\n\n输出路径：\n  - docs/memory-tdai/data/latest.json\n  - docs/memory-tdai/data/history/YYYY-MM-DD.json\n\ngit commit 信息：[memory-tdai] YYYY-MM-DD auto-update\n\n⚠️ 禁止导出：message_text、session_key、content、metadata_json、scene_block 内容、persona 内容、任何 API key"
+    "message": "执行 memory-tdai 每日健康快照 exporter。\n\n参考规格：docs/memory-tdai/docs/exporter-memory-tdai-spec.md\n参考代码：scripts/memory-tdai/exporter.py\n\n输出路径：\n  - docs/memory-tdai/data/latest.json\n  - docs/memory-tdai/data/history/YYYY-MM-DD.json\n\ngit commit 信息：[memory-tdai] YYYY-MM-DD auto-update\n\n⚠️ 禁止导出：message_text、session_key、content、metadata_json、scene_block 内容、persona 内容、任何 API key"
   },
   "delivery": { "mode": "announce" },
   "failureAlert": { "after": 3, "mode": "announce" }
@@ -260,7 +260,7 @@ hashlib（标准库）
   "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
-    "message": "执行 memory-tdai 增量修复（修复新产生的缺失 embedding）。\n\n参考代码：scripts/fix-missing-embeddings.py\n\n参数：--limit 500（每小时最多处理 500 条新增缺失）\n参数：--checkpoint 50（每 50 批 checkpoint）\n\n⚠️ 不要修改已有的 embedding，仅处理 missing=True 的新记录"
+    "message": "执行 memory-tdai 增量修复（修复新产生的缺失 embedding）。\n\n参考代码：scripts/memory-tdai/fix_missing_embeddings.py\n\n参数：--limit 500（每小时最多处理 500 条新增缺失）\n参数：--checkpoint 50（每 50 批 checkpoint）\n\n⚠️ 不要修改已有的 embedding，仅处理 missing=True 的新记录"
   },
   "delivery": { "mode": "none" },
   "failureAlert": { "after": 3, "mode": "announce" }
@@ -274,7 +274,7 @@ hashlib（标准库）
 ### T1: 基本导出
 
 ```bash
-python3 scripts/exporter_memory_tdai.py --dry-run
+python3 scripts/memory-tdai/exporter.py --dry-run
 ```
 
 **预期输出：**
@@ -290,7 +290,7 @@ python3 scripts/exporter_memory_tdai.py --dry-run
 ### T2: 黑名单字段检查
 
 ```bash
-python3 scripts/exporter_memory_tdai.py --dry-run
+python3 scripts/memory-tdai/exporter.py --dry-run
 # 检查输出 JSON 中不包含以下字段：
 grep -E "message_text|session_key|content|metadata_json|apiKey" data/latest.json
 # 预期：无输出（PASS）
@@ -299,7 +299,7 @@ grep -E "message_text|session_key|content|metadata_json|apiKey" data/latest.json
 ### T3: JSON Schema 验证
 
 ```bash
-python3 scripts/exporter_memory_tdai.py --dry-run --validate-schema
+python3 scripts/memory-tdai/exporter.py --dry-run --validate-schema
 # 预期：exit code 0
 ```
 

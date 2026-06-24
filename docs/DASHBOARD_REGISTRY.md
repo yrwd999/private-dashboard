@@ -10,7 +10,7 @@
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务（见下） |
-| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 🚧 开发中 | `~/.openclaw/memory-tdai/vectors.db` | 待创建 |
+| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | ✅ 运行中 | `~/.openclaw/memory-tdai/vectors.db` | 2 个 cron（每日 03:00 + 每小时 :30） |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 
@@ -114,7 +114,7 @@ docs/{id}/                    ← GitHub Pages 路径（/{id}/ 出现在 URL 中
 - [ ] 确认 failureAlert 生效（故意制造一次失败）
 
 ### Phase 5：上线
-- [ ] 本文件更新状态为 `✅ 运行中`
+- [x] 本文件更新状态为 `✅ 运行中`（2026-06-24）
 - [ ] GitHub Pages 已激活（Settings → Pages → Source: main branch, /docs）
 - [ ] 确认 URL 可访问
 
