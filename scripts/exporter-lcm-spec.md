@@ -221,6 +221,8 @@ SELECT transcript_entry_id FROM messages;
 
 ## 🔄 cron 接入（Phase 4）
 
+> ⚠️ 仓库路径已迁移至 `/mnt/github/private-dashboard/`（2026-06-24）
+
 ```yaml
 name: lcm-daily-snapshot
 schedule:
@@ -232,13 +234,22 @@ payload:
   kind: agentTurn
   message: |
     执行 LCM Dashboard 数据导出：
-    1. cd ~/openclaw/workspace-work/repos/private-dashboard
-    2. python3 scripts/exporter_lcm.py --output-dir ./lcm/data
-    3. 若成功，git add lcm/data/ && git commit -m "[LCM] auto-update $(date +%Y-%m-%d)" && git push
-    4. 若失败，发 Signal 告警
+    1. python3 /mnt/github/private-dashboard/scripts/exporter_lcm.py \
+         --db-path ~/.openclaw/lcm.db \
+         --output-dir /mnt/github/private-dashboard/lcm/data
+    2. 若成功，cd /mnt/github/private-dashboard && \
+         git add lcm/data/latest.json lcm/data/history/ && \
+         git commit -m "[LCM] auto-update $(date +%Y-%m-%d)" && \
+         git push origin main
+    3. 若失败，静默退出（failureAlert 会通知 Ray）
   timeoutSeconds: 180
 delivery:
   mode: none  # 静默执行，结果通过 dashboard 可视化
+failureAlert:
+  after: 1           # 首次失败即通知
+  channel: telegram
+  to: 8130748132
+  cooldownMs: 3600000 # 1 小时冷却
 ```
 
 ---
