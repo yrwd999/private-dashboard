@@ -9,6 +9,7 @@
 | Dashboard | Description | Status |
 |----------|-------------|--------|
 | [**LCM Memory**](./lcm/) | OpenClaw Lossless Context Management · conversation trends, memory health | ✅ Live |
+| [**memory-tdai**](./memory-tdai/) | OpenClaw memory-tdai plugin · vector completeness, pipeline health, API monitoring | ✅ Live |
 | Homelab | Home Assistant infrastructure overview | 📋 Planned |
 | Network | Network topology and monitoring | 📋 Planned |
 
