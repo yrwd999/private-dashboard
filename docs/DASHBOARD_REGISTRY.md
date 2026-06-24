@@ -9,11 +9,33 @@
 
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
-| `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 每日 02:00 |
+| `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务（见下） |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 
 **公开 URL**：`https://yrwd999.github.io/private-dashboard/docs/{id}/`
+
+### LCM Dashboard Cron 任务详情
+
+| # | 任务名 | Cron | 脚本 | 产出文件 | 类型 |
+|---|--------|------|------|---------|------|
+| 1 | `lcm-daily-snapshot` | 每日 02:00 | `scripts/exporter_lcm.py` | `latest.json` + `history/YYYY-MM-DD.json` | 数据导出 |
+| 2 | `lcm-wal-health` | 每日 03:00 | `scripts/wal_health_check.py` | `wal_health.json` | 诊断 |
+| 3 | `lcm-doctor-scan` | 每周六 02:00 | `scripts/doctor_scan.py` | `history/lcm-doctor-YYYY-MM-DD.json` | 只读诊断 |
+| 4 | `lcm-web-archive` | 每月 1日 03:00 | `scripts/web_archive.py` | `history/lcm-web-archive-YYYY-MM-DD.json` | 归档（destructive） |
+| 5 | `lcm-backup-cleanup` | 每月 1日 04:00 | `scripts/backup_cleanup.py` | `history/lcm-backup-cleanup-YYYY-MM-DD.json` | 清理（destructive） |
+
+**Dashboard 7 张卡片数据来源：**
+
+| 卡片 | 数据来源 | 文件 |
+|------|---------|------|
+| ① 核心指标 | `exporter_lcm.py` → `overview` | `latest.json` |
+| ② 30天消息趋势 | `exporter_lcm.py` → `message_trend_30d` | `latest.json` |
+| ③ Agent分布 | `exporter_lcm.py` → `agent_distribution` | `latest.json` |
+| ④ 会话类型分布 | `exporter_lcm.py` → `session_key_patterns` | `latest.json` |
+| ⑤ 备份文件状态 | `exporter_lcm.py` → `backup_status` | `latest.json` |
+| ⑥ 健康状态 | `exporter_lcm.py` + `wal_health_check.py` → `health_alerts` | `latest.json` + `wal_health.json`（合并） |
+| ⑦ 最近7天记录 | `history/` 目录历史 JSON | 自动读取 |
 
 ---
 
