@@ -481,7 +481,7 @@ function renderDashboard(data) {
           </div>
         </div>
         <div class="agent-dist-wrap">
-          <div class="agent-chart-wrap">
+          <div id="agent-chart-wrap" class="agent-chart-wrap">
             <canvas id="agent-chart"></canvas>
           </div>
           <div class="agent-legend" id="agent-legend"></div>
