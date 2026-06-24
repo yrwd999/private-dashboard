@@ -560,6 +560,7 @@ async function loadData() {
   renderSkeletons();
 
   try {
+    // 1. Fetch latest.json (main dashboard data)
     const res = await fetch('./data/latest.json', { cache: 'no-cache' });
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${res.statusText}`);
@@ -569,6 +570,27 @@ async function loadData() {
     // Validate minimal schema
     if (!data.meta || !data.overview || !data.agent_distribution) {
       throw new Error('JSON 格式不符合 schema v1.0（缺少必需字段）');
+    }
+
+    // 2. Fetch wal_health.json (WAL diagnostic data — optional, non-blocking)
+    try {
+      const walRes = await fetch('./data/wal_health.json', { cache: 'no-cache' });
+      if (walRes.ok) {
+        const walData = await walRes.json();
+        // Merge WAL-specific health alerts with exporter health_alerts
+        if (walData.health_alerts && walData.health_alerts.length > 0) {
+          const baseAlerts = data.health_alerts || [];
+          // Append WAL alerts with source marker
+          const walAlerts = walData.health_alerts.map(a => ({ ...a, source: 'wal_health' }));
+          data.health_alerts = [...baseAlerts, ...walAlerts];
+        }
+        // Also attach WAL-specific trend info for display
+        if (walData.wal_trend) data._wal_trend = walData.wal_trend;
+        if (walData.archive_status) data._archive_status = walData.archive_status;
+      }
+    } catch (walErr) {
+      // WAL health is non-critical; log but don't fail the whole load
+      console.warn('[LCM Dashboard] wal_health.json not available:', walErr.message);
     }
 
     state.data = data;
