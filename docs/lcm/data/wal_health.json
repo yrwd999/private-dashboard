@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-06-24T10:59:01.776744+08:00",
+  "db_size_mb": 441.13,
+  "wal_size_mb": 5.9,
+  "wal_db_ratio": 0.0134,
+  "wal_trend": {
+    "trend": "unknown",
+    "samples": 1
+  },
+  "archive_status": {
+    "fresh": true,
+    "days_since_archive": 0,
+    "alert": "ok"
+  },
+  "message_volume": {
+    "alert": "unknown",
+    "samples": 1
+  },
+  "health_alerts": [
+    {
+      "level": "info",
+      "code": "WAL_RATIO_OK",
+      "message": "WAL/DB 比例正常：1.34%",
+      "value": 0.0134,
+      "threshold": 0.1,
+      "timestamp": "2026-06-24T10:59:01.776727+08:00"
+    },
+    {
+      "level": "info",
+      "code": "WAL_SIZE_NORMAL",
+      "message": "WAL 文件大小正常：5.90 MB",
+      "value": 5.9,
+      "threshold": 50,
+      "timestamp": "2026-06-24T10:59:01.776727+08:00"
+    },
+    {
+      "level": "success",
+      "code": "ARCHIVE_FRESH",
+      "message": "今日已有归档记录",
+      "days_since_archive": 0,
+      "timestamp": "2026-06-24T10:59:01.776727+08:00"
+    }
+  ]
+}
