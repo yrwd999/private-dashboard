@@ -11,8 +11,7 @@
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务（见下） |
 | `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | ✅ 运行中 | `~/.openclaw/memory-tdai/vectors.db` | 2 个 cron（每日 03:00 + 每小时 :30） |
-| `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
-| `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
+
 
 **公开 URL**：`https://yrwd999.github.io/private-dashboard/docs/{id}/`
 

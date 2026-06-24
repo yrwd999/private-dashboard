@@ -30,7 +30,7 @@
 
 | 机制 | 实现方式 | 说明 |
 |------|----------|------|
-| **时间分片** | 每个 dashboard cron 在不同分钟执行 | 默认错开 30min，如 LCM=02:00, memory-tdai=02:30 |
+| **时间分片** | 每个 dashboard cron 在不同分钟执行 | 默认错开 30min，如 LCM=02:00, memory-tdai=03:00 |
 | **锁文件** | `.push-locks/{dashboard-id}.lock` | 持锁执行 git push，锁文件不过期（crash 后下次覆盖） |
 | **重试** | cron job failureAlert 不包含 git retry | 失败后下次定时自然重试，不堆积 |
 | **目录隔离** | 每个 dashboard 数据在独立子目录 | `docs/{id}/data/` 互不覆盖，git add 仅针对各自目录 |
@@ -64,17 +64,12 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 │   │       ├── SECURITY.md
 │   │       └── exporter-lcm-spec.md  ← Exporter 实现规格
 │   │
-│   ├── memory-tdai/                  ← Memory-TDAI Dashboard（🚧 开发中）
+│   ├── memory-tdai/                  ← Memory-TDAI Dashboard
 │   │   ├── index.html
 │   │   ├── assets/
 │   │   ├── data/
 │   │   └── docs/
 │   │
-│   ├── homelab/                      ← （预留）Homelab Dashboard
-│   │   └── docs/
-│   │
-│   └── network/                      ← （预留）Network Dashboard
-│       └── docs/
 │
 └── scripts/                           ← 内部工具（不在 GitHub Pages 上）
     ├── lcm/                          ← LCM 脚本组
@@ -86,7 +81,7 @@ private-dashboard/                     ← GitHub Pages source = /docs/
     │   ├── README.md                 ← LCM 脚本使用文档
     │   └── tests/
     │       └── test_exporter.py      ← Exporter 测试套件
-    ├── memory-tdai/                  ← memory-tdai 脚本组（🚧 开发中）
+    ├── memory-tdai/                  ← memory-tdai 脚本组
     │   ├── exporter.py
     │   └── README.md
     └── README.md                     ← 脚本目录总览（本文件）
@@ -107,10 +102,10 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 
 | 规则 | 说明 | 示例 |
 |------|------|------|
-| 格式 | 小写字母 + 数字 + 连字符 | `lcm`, `homelab`, `network-ops` |
+| 格式 | 小写字母 + 数字 + 连字符 | `lcm`, `network-ops` |
 | 长度 | 2~20 字符 | — |
 | 唯一性 | 全仓库唯一 | — |
-| 语义化 | 与业务 domain 对应 | `lcm`=记忆系统, `homelab`=智能家居 |
+| 语义化 | 与业务 domain 对应 | `lcm`=记忆系统, `memory-tdai`=记忆插件 |
 
 ### 文件命名（强制）
 
@@ -226,7 +221,7 @@ scripts/{new-id}/        ← 内部工具（不对外暴露）
 
 ### 检查清单（按顺序执行）
 
-- [ ] **1. 在 `docs/DASHBOARD_REGISTRY.md` 添加记录**（先登记，再开发）
+- [ ] **1. 在 `docs/DASHBOARD_REGISTRY.md` 和 `docs/README.md` 添加记录**（先登记，再开发；后者是 GitHub Pages 公开入口页）
 
 - [ ] **2. 创建目录骨架**
 
@@ -268,13 +263,17 @@ mkdir -p scripts/{new-id}
 
 - [ ] **8. Commit 并推送**
   ```bash
-  git add docs/{new-id}/ scripts/{new-id}/
+  git add docs/{new-id}/ scripts/{new-id}/ docs/README.md docs/DASHBOARD_REGISTRY.md
   git commit -m "feat({new-id}): initial dashboard scaffold"
   git push origin main
   ```
+  **⚠️ 注意**：`docs/README.md` 是 GitHub Pages 根页面（公开入口），新增 dashboard 必须加入 dashboard 列表，否则无法从 `https://yrwd999.github.io/private-dashboard/` 访问到
 
 - [ ] **9. 创建 cron 任务**（参照上方模板，注意脚本路径 `scripts/{new-id}/exporter.py`）
-- [ ] **10. 更新 `docs/DASHBOARD_REGISTRY.md`** 状态为 ✅
+- [ ] **10. 更新所有 README 文件状态为 ✅**
+  - `docs/DASHBOARD_REGISTRY.md` 状态改为 ✅
+  - `docs/README.md` dashboard 列表更新
+  - `README.md` Registry 表更新
 
 ---
 
@@ -330,8 +329,7 @@ mkdir -p scripts/{new-id}
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务 |
 | `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | ✅ 运行中 | `~/.openclaw/memory-tdai/vectors.db` | 2 个 cron（每日 03:00 + 每小时 :30） |
-| `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
-| `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
+
 
 ---
 
