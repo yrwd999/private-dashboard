@@ -1,7 +1,7 @@
 # Private Dashboard — Engineering Specification
 
 > 内部工程规范文档 · 本文件**不在 GitHub Pages 上对外暴露**
-> 部署：GitHub Pages（source: `/docs/`）· Dashboard 访问：`https://yrwd999.github.io/private-dashboard/docs/{id}/`
+> 部署：GitHub Pages（source: `/docs/`）· Dashboard 访问：`https://yrwd999.github.io/private-dashboard/{id}/`
 
 ---
 
@@ -22,7 +22,7 @@
 **为什么不选 Multi-repo（Strategy B）：**
 - 当前阶段仅 LCM Memory Dashboard，不值得多 repo 维护开销
 - 未来如需完全独立版本管理，可将 `docs/lcm/` 拆出为独立 repo
-- GitHub Pages 的 URL 结构（`/docs/{name}/`）对单 dashboard 场景足够清晰
+- GitHub Pages 的 URL 结构（`/{name}/`，无 `/docs/` 前缀）对单 dashboard 场景足够清晰
 
 ### Git 冲突防护策略
 
@@ -95,8 +95,8 @@ private-dashboard/                     ← GitHub Pages source = /docs/
 **URL 映射：**
 | 资源 | GitHub Pages URL |
 |------|-------------------|
-| Dashboard 入口 | `https://yrwd999.github.io/private-dashboard/docs/{id}/` |
-| 公开规范文档 | `https://yrwd999.github.io/private-dashboard/docs/{id}/docs/SOMETHING.md` |
+| Dashboard 入口 | `https://yrwd999.github.io/private-dashboard/{id}/` |
+| 公开规范文档 | `https://yrwd999.github.io/private-dashboard/{id}/docs/SOMETHING.md` |
 | 内部工程文档 | 不对外暴露（无 Pages mapping）|
 
 ---
