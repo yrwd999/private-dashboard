@@ -1,0 +1,22 @@
+# Build artifacts
+node_modules/
+dist/
+*.log
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Local overrides
+.env
+.env.local
+
+# Sensitive data (defense in depth)
+*.bak
+*.tmp
+*~
+*.swp
+
+# Future: prevent accidentally committing raw data
+# lcm/data/history/  # 仅 latest.json 入库，history 暂不入
