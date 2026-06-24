@@ -10,6 +10,7 @@
 | ID | 名称 | 路径 | 状态 | 数据源 | Cron |
 |----|------|------|------|--------|------|
 | `lcm` | LCM Memory | `/docs/lcm/` | ✅ 运行中 | `~/.openclaw/lcm.db` | 5 个 cron 任务（见下） |
+| `memory-tdai` | memory-tdai | `/docs/memory-tdai/` | 📋 规划中 | `~/.openclaw/memory-tdai/vectors.db` | 每日 03:00 + 每小时半点 |
 | `homelab` | Homelab | `/docs/homelab/` | 📋 规划中 | — | — |
 | `network` | Network | `/docs/network/` | 📋 规划中 | — | — |
 
@@ -24,6 +25,24 @@
 | 3 | `lcm-doctor-scan` | 每周六 02:00 | `scripts/doctor_scan.py` | `history/lcm-doctor-YYYY-MM-DD.json` | 只读诊断 |
 | 4 | `lcm-web-archive` | 每月 1日 03:00 | `scripts/web_archive.py` | `history/lcm-web-archive-YYYY-MM-DD.json` | 归档（destructive） |
 | 5 | `lcm-backup-cleanup` | 每月 1日 04:00 | `scripts/backup_cleanup.py` | `history/lcm-backup-cleanup-YYYY-MM-DD.json` | 清理（destructive） |
+
+**阈值配置（环境变量）：**
+
+| 脚本 | 环境变量 | 默认值 | 说明 |
+|------|---------|--------|------|
+| `wal_health_check.py` | `WAL_THRESHOLD_RATIO` | `0.10` | WAL/DB > 此值 → warning |
+| | `WAL_THRESHOLD_DAILY_GB` | `0.05` | DB 日增长 > 此值 → warning |
+| | `WAL_THRESHOLD_ARCHIVE_DAYS` | `7` | 超过此天数无归档 → warning |
+| | `WAL_THRESHOLD_MSG_DROP` | `0.80` | 消息量比昨日下跌 > 此比例 → warning |
+| | `WAL_SIZE_MB_WARN` | `50` | WAL 绝对大小阈值 MB |
+| `web_archive.py` | `WEB_ARCHIVE_THRESHOLD_DAYS` | `3` | 超过此天数未活跃 → 归档候选 |
+| `backup_cleanup.py` | `CLEANUP_CUTOFF_DAYS` | `90` | .bak 文件超过此天数 → 删除候选 |
+| | `CLEANUP_RECENT_PROTECTION_DAYS` | `30` | 最近 N 天内即使满足也保护 |
+| 所有脚本 | `LCM_DB_PATH` | `~/.openclaw/lcm.db` | 数据库路径 |
+| | `LCM_REPO_DIR` | `/mnt/github/private-dashboard` | 仓库路径 |
+
+> 在 cron job payload 中通过环境变量注入自定义阈值，例如：
+> `WAL_THRESHOLD_RATIO=0.05 python3 scripts/wal_health_check.py`
 
 **Dashboard 7 张卡片数据来源：**
 

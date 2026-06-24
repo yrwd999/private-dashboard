@@ -30,6 +30,11 @@ from pathlib import Path
 from typing import Any
 
 
+# ─── Magic numbers → named constants (#8) ───────────────────────────────────
+# token_count * 4 ≈ 消息字节数估算（OpenClaw 平均 token≈4 字节 UTF-8）
+TOKEN_BYTES_ESTIMATE = 4
+
+
 # ─── 硬约束：黑名单（启动时 + 输出前双重校验） ─────────────────────────────
 
 FORBIDDEN_FIELD_NAMES = frozenset({
@@ -240,11 +245,13 @@ def query_session_key_patterns(conn: sqlite3.Connection) -> list[dict]:
 
 def query_message_trend_30d(conn: sqlite3.Connection) -> list[dict]:
     """近 30 天每日消息数 + 估算大小"""
-    rows = conn.execute("""
+    # #8: TOKEN_BYTES_ESTIMATE 注入 SQL（SQLite 不能引用 Python 变量）
+    size_expr = f"SUM(token_count) * {TOKEN_BYTES_ESTIMATE} / 1024.0 / 1024.0"
+    rows = conn.execute(f"""
         SELECT
             date(created_at) AS date,
             COUNT(*) AS count,
-            SUM(token_count) * 4 / 1024.0 / 1024.0 AS size_mb
+            {size_expr} AS size_mb
         FROM messages
         WHERE created_at >= datetime('now', '-30 days')
         GROUP BY date(created_at)
