@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-06-24T11:07:26.785696+08:00",
+  "task": "lcm-web-archive",
+  "threshold_days": 3,
+  "stats_before": {
+    "active_web_sessions": 0,
+    "archived_web_sessions": 6,
+    "last_archive_at": "2026-06-24 01:16:40"
+  },
+  "sessions_found": 0,
+  "archive_result": {
+    "requested": 0,
+    "archived": 0,
+    "archived_ids": []
+  },
+  "stats_after": {
+    "active_web_sessions": 0,
+    "archived_web_sessions": 6,
+    "last_archive_at": "2026-06-24 01:16:40"
+  },
+  "sessions": []
+}

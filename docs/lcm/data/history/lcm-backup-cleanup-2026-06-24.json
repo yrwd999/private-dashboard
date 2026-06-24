@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-06-24T11:07:57.615262+08:00",
+  "task": "lcm-backup-cleanup",
+  "policy": {
+    "cutoff_days": 90,
+    "recent_protection_days": 30
+  },
+  "scan_summary": {
+    "total_files": 0,
+    "total_size_mb": 0,
+    "qualified_count": 0,
+    "qualified_size_mb": 0
+  },
+  "cleanup_result": {
+    "deleted_count": 0,
+    "failed_count": 0,
+    "total_freed_mb": 0.0,
+    "deleted_files": [],
+    "failed_files": []
+  },
+  "remaining_files": []
+}
