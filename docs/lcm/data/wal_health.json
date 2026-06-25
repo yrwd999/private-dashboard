@@ -1,17 +1,19 @@
 {
-  "generated_at": "2026-06-25T03:02:19.632681+08:00",
-  "db_size_mb": 460.73,
-  "wal_size_mb": 5.9,
-  "wal_db_ratio": 0.0128,
+  "generated_at": "2026-06-26T03:03:06.387782+08:00",
+  "db_size_mb": 545.15,
+  "wal_size_mb": 147.48,
+  "wal_db_ratio": 0.2705,
   "wal_trend": {
-    "trend": "stable",
-    "daily_growth_mb": 19.6,
-    "samples": 2,
+    "trend": "growing",
+    "daily_growth_mb": 52.01,
+    "samples": 3,
     "wal_history": [
+      147.48,
       5.9,
       5.9
     ],
     "db_history": [
+      545.15,
       460.73,
       441.13
     ]
@@ -23,46 +25,55 @@
   },
   "message_volume": {
     "alert": "ok",
-    "drop_rate": 1.112,
-    "today": 46654,
-    "yesterday": 41960
+    "drop_rate": 1.08,
+    "today": 50400,
+    "yesterday": 46654
   },
   "health_alerts": [
     {
-      "level": "info",
-      "code": "WAL_RATIO_OK",
-      "message": "WAL/DB 比例正常：1.28%",
-      "value": 0.0128,
+      "level": "warning",
+      "code": "WAL_RATIO_HIGH",
+      "message": "WAL/DB 比例过高：27.1%（阈值 10%）",
+      "value": 0.2705,
       "threshold": 0.1,
-      "timestamp": "2026-06-25T03:02:19.632663+08:00"
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
     },
     {
-      "level": "info",
-      "code": "WAL_SIZE_NORMAL",
-      "message": "WAL 文件大小正常：5.90 MB",
-      "value": 5.9,
+      "level": "warning",
+      "code": "WAL_SIZE_LARGE",
+      "message": "WAL 文件较大：147.5 MB，建议手动 checkpoint",
+      "value": 147.48,
       "threshold": 50.0,
-      "timestamp": "2026-06-25T03:02:19.632663+08:00"
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
     },
     {
-      "level": "info",
-      "code": "WAL_TREND_STABLE",
-      "message": "WAL 增长趋势平稳",
-      "trend": "stable",
-      "timestamp": "2026-06-25T03:02:19.632663+08:00"
+      "level": "warning",
+      "code": "WAL_TREND_GROWING",
+      "message": "WAL 持续增长（52.01 MB/天），建议检查点",
+      "trend": "growing",
+      "daily_growth_mb": 52.01,
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
     },
     {
       "level": "success",
       "code": "ARCHIVE_FRESH",
       "message": "今日已有归档记录",
       "days_since_archive": 0,
-      "timestamp": "2026-06-25T03:02:19.632663+08:00"
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
     },
     {
       "level": "info",
       "code": "MSG_VOLUME_NORMAL",
       "message": "消息量正常",
-      "timestamp": "2026-06-25T03:02:19.632663+08:00"
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
+    },
+    {
+      "level": "warning",
+      "code": "DB_GROWTH_HIGH",
+      "message": "DB 日增长率较高：52.0 MB/天（阈值 51 MB）",
+      "daily_growth_mb": 52.01,
+      "threshold_mb": 51.2,
+      "timestamp": "2026-06-26T03:03:06.387749+08:00"
     }
   ]
 }
