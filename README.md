@@ -2,6 +2,8 @@
 
 > 内部工程规范文档 · 本文件**不在 GitHub Pages 上对外暴露**
 > 部署：GitHub Pages（source: `/docs/`）· Dashboard 访问：`https://yrwd999.github.io/private-dashboard/{id}/`
+>
+[![CI](https://github.com/yrwd999/private-dashboard/actions/workflows/ci.yaml/badge.svg)](https://github.com/yrwd999/private-dashboard/actions/workflows/ci.yaml)
 
 ---
 
@@ -357,3 +359,4 @@ python3 scripts/security_scan.py --strict
 | 2026-06-24 | 全仓库安全审计：发现并修复 4 个脚本绝对路径/session_key 泄漏问题 |
 | 2026-06-24 | 落地 SECURITY.md 安全策略 + scripts/security_scan.py 扫描器 |
 | 2026-06-24 | scripts/README.md 新增提交前安全检查清单 |
+| 2026-06-25 | 仓库结构合规审计：36% → 100% · 新增 LICENSE / CI / CONTRIBUTING.md / CHANGELOG.md / .editorconfig / GitHub 模板 |
