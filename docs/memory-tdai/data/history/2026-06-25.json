@@ -1,18 +1,18 @@
 {
   "meta": {
-    "generated_at": "2026-06-25T01:16:44+08:00",
+    "generated_at": "2026-06-25T09:26:29+08:00",
     "vectors_db_size_mb": 136.5,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_mb": 14.154,
+    "jsonl_total_mb": 14.17,
     "jsonl_file_count": 25,
     "wal_size_mb": 3.98,
     "schema_version": "1.0"
   },
   "l0": {
-    "conversations": 18307,
-    "vectors": 18307,
-    "missing": 0,
-    "completeness_pct": 100.0,
+    "conversations": 18328,
+    "vectors": 18314,
+    "missing": 14,
+    "completeness_pct": 99.9,
     "fts_synced": true,
     "errors_24h": {
       "http_400_batch_size": 0,
@@ -70,7 +70,7 @@
     "vectors_db_mb": 136.5,
     "wal_mb": 3.98,
     "wal_oversized": false,
-    "jsonl_total_mb": 14.154,
+    "jsonl_total_mb": 14.17,
     "jsonl_file_count": 25,
     "backup_mb": 0.0,
     "storage_growth_mb_per_day": 0.0
@@ -104,7 +104,7 @@
     "clean_time": "03:00",
     "last_run": null,
     "last_run_days_ago": 9999,
-    "l0_total": 18307,
+    "l0_total": 18328,
     "l0_expired": 0,
     "l1_total": 216,
     "l1_expired": 0,
@@ -113,9 +113,17 @@
   "health_alerts": [
     {
       "level": "warning",
+      "code": "L0_EMBEDDING_INCOMPLETE",
+      "message": "L0 向量完整率 99.9%（缺失 14 条）",
+      "value": 99.9,
+      "threshold": 99.0,
+      "timestamp": "2026-06-25T09:26:29+08:00"
+    },
+    {
+      "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-25T01:16:44+08:00"
+      "timestamp": "2026-06-25T09:26:29+08:00"
     }
   ]
 }
