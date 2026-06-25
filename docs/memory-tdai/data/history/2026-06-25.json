@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-25T01:15:53+08:00",
+    "generated_at": "2026-06-25T01:16:44+08:00",
     "vectors_db_size_mb": 136.5,
     "vectors_db_path": "memory-tdai/vectors.db",
     "jsonl_total_mb": 14.154,
@@ -115,7 +115,7 @@
       "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-25T01:15:53+08:00"
+      "timestamp": "2026-06-25T01:16:44+08:00"
     }
   ]
 }
