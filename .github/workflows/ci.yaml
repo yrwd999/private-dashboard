@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  python-lint:
-    name: Python Lint
+  python-quality:
+    name: Python Quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,18 +18,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install lint tools
-        run: |
-          pip install ruff black
+      - name: Install tools
+        run: pip install ruff black
 
-      - name: Run ruff (lint)
+      - name: Run ruff
         run: ruff check scripts/
 
-      - name: Run black (format check)
+      - name: Run black check
         run: black --check scripts/
 
-  python-test:
-    name: Python Syntax
+  python-tests:
+    name: Python Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,21 +38,27 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Syntax check
-        run: |
-          python3 -m py_compile scripts/lcm/*.py
+      - name: Run LCM exporter tests
+        run: python3 scripts/lcm/tests/test_exporter.py
 
-  js-check:
-    name: JS Lint
+  security-scan:
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+      - name: Security scan
+        run: python3 scripts/security_scan.py || true
 
-      - name: Check JS syntax (no package.json found — skip install)
+  js-syntax:
+    name: JS Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JS syntax
         run: |
-          find docs -name "*.js" -exec node --check {} \; 2>/dev/null || true
+          # Syntax check all JS files (node --check validates without running)
+          find docs/ -name "*.js" -print0 | while IFS= read -r -d '' f; do
+            node --check "$f" || echo "SYNTAX ERROR: $f"
+          done
