@@ -1,18 +1,18 @@
 {
   "meta": {
-    "generated_at": "2026-06-26T03:02:04+08:00",
-    "vectors_db_size_mb": 143.6,
+    "generated_at": "2026-06-26T09:02:05+08:00",
+    "vectors_db_size_mb": 150.6,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_mb": 14.893,
-    "jsonl_file_count": 25,
-    "wal_size_mb": 4.11,
-    "schema_version": "1.0"
+    "jsonl_total_mb": 15.579,
+    "jsonl_file_count": 26,
+    "wal_size_mb": 4.0,
+    "schema_version": "1.1"
   },
   "l0": {
-    "conversations": 19423,
-    "vectors": 19423,
-    "missing": 0,
-    "completeness_pct": 100.0,
+    "conversations": 20366,
+    "vectors": 20332,
+    "missing": 34,
+    "completeness_pct": 99.8,
     "fts_synced": true,
     "errors_24h": {
       "http_400_batch_size": 0,
@@ -25,10 +25,10 @@
     "capture_trend_30d": []
   },
   "l1": {
-    "records": 219,
-    "vectors": 214,
-    "missing": 5,
-    "completeness_pct": 97.7,
+    "records": 224,
+    "vectors": 218,
+    "missing": 6,
+    "completeness_pct": 97.3,
     "fts_synced": true,
     "errors_24h": {
       "http_400_batch_size": 0,
@@ -42,9 +42,9 @@
     "extraction_latency_ms_p95": 0
   },
   "l2": {
-    "scene_blocks": 12,
-    "last_updated": "2026-06-25T10:09:29Z",
-    "last_updated_days_ago": 0.4,
+    "scene_blocks": 11,
+    "last_updated": "2026-06-26T06:49:20Z",
+    "last_updated_days_ago": 0.1,
     "file_list": [
       "AI-记忆系统升级决策.md",
       "Apex系统集成与技术调研.md",
@@ -52,7 +52,6 @@
       "LCM-系统与工具治理.md",
       "OpenClaw-系统治理与规范约束.md",
       "TencentDB-系统优化与处置闭环.md",
-      "ha-mcp-cleaner攻坚与工程铁律.md",
       "外部生态集成-小红书解析.md",
       "智能家居设备与环境配置.md",
       "本地网络与基础设施配置.md",
@@ -63,17 +62,17 @@
   },
   "l3": {
     "persona_exists": true,
-    "last_updated": "2026-06-25T10:56:28Z",
-    "last_updated_days_ago": 0.3,
-    "file_size_bytes": 8264,
+    "last_updated": "2026-06-26T08:07:36Z",
+    "last_updated_days_ago": 0.0,
+    "file_size_bytes": 8529,
     "freshness": "healthy"
   },
   "storage": {
-    "vectors_db_mb": 143.6,
-    "wal_mb": 4.11,
+    "vectors_db_mb": 150.6,
+    "wal_mb": 4.0,
     "wal_oversized": false,
-    "jsonl_total_mb": 14.893,
-    "jsonl_file_count": 25,
+    "jsonl_total_mb": 15.579,
+    "jsonl_file_count": 26,
     "backup_mb": 0.0,
     "storage_growth_mb_per_day": 0.0
   },
@@ -82,7 +81,9 @@
     "max_results": 5,
     "score_threshold": 0.3,
     "timeout_ms": 10000,
-    "status": "healthy"
+    "status": "healthy",
+    "fts_health_score": 100.0,
+    "high_priority_retrievable_pct": 100.0
   },
   "api": {
     "embedding": {
@@ -106,18 +107,26 @@
     "clean_time": "03:00",
     "last_run": null,
     "last_run_days_ago": 9999,
-    "l0_total": 19423,
+    "l0_total": 20366,
     "l0_expired": 0,
-    "l1_total": 219,
+    "l1_total": 224,
     "l1_expired": 0,
     "effectiveness": "low"
   },
   "health_alerts": [
     {
       "level": "warning",
+      "code": "L0_EMBEDDING_INCOMPLETE",
+      "message": "L0 向量完整率 99.8%（缺失 34 条）",
+      "value": 99.8,
+      "threshold": 99.0,
+      "timestamp": "2026-06-26T09:02:05+08:00"
+    },
+    {
+      "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-26T03:02:04+08:00"
+      "timestamp": "2026-06-26T09:02:05+08:00"
     }
   ]
 }
