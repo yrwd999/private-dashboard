@@ -335,6 +335,12 @@ body {
   font-size: var(--text-caption);
 }
 
+.db-mtd-sep {
+  color: var(--fg-tertiary);
+  margin: 0 3px;
+  font-weight: 400;
+}
+
 .db-mtd-submetric {
   color: var(--fg-tertiary);
 }
