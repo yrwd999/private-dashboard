@@ -92,6 +92,11 @@ scripts/
 
 ✅ 运行中。详见 [`memory-tdai/README.md`](./memory-tdai/README.md)
 
+| 脚本 | Cron 任务 | 频率 |
+|------|-----------|------|
+| `exporter.py` | `memory-tdai-daily-snapshot` | 每日 03:00 |
+| `fix_missing_embeddings.py` | `memory-tdai-hourly-repair` | 每小时第 30 分 |
+
 ---
 
 ## 🔒 提交前安全检查（强制）

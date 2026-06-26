@@ -191,12 +191,31 @@ SELECT COUNT(*) FROM l1_fts;
 
 -- Q9: vectors.db 大小（字节）
 SELECT page_count * page_size FROM pragma_page_count(), pragma_page_size();
+
+-- Q10: 高优先级记录总数（priority > 90）
+SELECT COUNT(*) FROM l1_records WHERE priority > 90;
+
+-- Q11: 高优先级且 FTS 索引命中的数量
+SELECT COUNT(*) FROM l1_fts WHERE rowid IN (SELECT rowid FROM l1_records WHERE priority > 90);
 ```
 
 **禁止的 SQL 模式：**
 - `SELECT *` — 全部禁止
 - 任何带 `WHERE message_text` / `WHERE content` 的查询
 - 任何带 `JOIN` 或 `SUBQUERY` 跨表查询
+
+---
+
+## 🚨 健康告警码
+
+| Alert Code | Severity | 触发条件 | 说明 |
+|------------|----------|-----------|------|
+| `L0_EMBEDDING_INCOMPLETE` | warning | `l0.completeness_pct < 99` | L0 向量缺失 |
+| `L1_VECTOR_INCOMPLETE` | warning | `l1.completeness_pct < 99` | L1 向量缺失 |
+| `WAL_SIZE_WARNING` | warning | `wal_mb > 5` | WAL 文件偏大 |
+| `WAL_SIZE_CRITICAL` | error | `wal_mb > 20` | WAL 文件过大 |
+| `FTS_INDEX_DESYNC` | warning | `fts_health_score < 100` | FTS5 索引与记录数不一致 |
+| `RECALL_HP_RETRIEVE_LOW` | warning | `high_priority_retrievable_pct < 90` | 高优先级记录可检索率偏低 |
 
 ---
 
@@ -251,7 +270,7 @@ hashlib（标准库）
 }
 ```
 
-### Hourly Incremental Repair（每小时半点）
+### Hourly Incremental Repair（每小时的第 30 分）
 
 ```json
 {
@@ -349,6 +368,13 @@ diff data/latest.json data/history/$(date +%Y-%m-%d).json  # 预期：无差异
 | 报告 | 输出 JSON 格式：`{"processed": 500, "failed": 0, "remaining": 6086}` |
 
 ---
+
+## 📌 维护记录
+
+| 日期 | 变更 | 操作者 |
+|------|------|--------|
+| 2026-06-24 | 初版 | Ray |
+| 2026-06-26 | P1-B-1：新增 recall quality 监控（fts_health_score / high_priority_retrievable_pct）、SQL 白名单 Q10/Q11（高优先级记录检索率）；新增 alert code：FTS_INDEX_DESYNC、RECALL_HP_RETRIEVE_LOW；cron 描述修正（"每小时半点" → "每小时的第 30 分"） | 小虾米 |
 
 ## 📚 参考资料
 

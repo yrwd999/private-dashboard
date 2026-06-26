@@ -9,7 +9,7 @@
 
 | 文件 | 生成方式 | 用途 |
 |------|----------|------|
-| `data/latest.json` | 每日 03:00 覆盖 | Dashboard 直接 fetch |
+| `data/latest.json` | 每 30 分钟覆盖 | Dashboard 直接 fetch |
 | `data/history/YYYY-MM-DD.json` | 每日 03:00 新建 | 30 天历史滚动（趋势图数据源） |
 
 ---
@@ -158,13 +158,13 @@ interface HealthAlert {
 ```json
 {
   "meta": {
-    "generated_at": "2026-06-24T03:00:00+08:00",
+    "generated_at": "2026-06-26T03:00:00+08:00",
     "vectors_db_size_mb": 135.2,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_size_mb": 0.135,
+    "jsonl_total_size_mb": 14.893,
     "jsonl_file_count": 24,
-    "wal_size_mb": 2.7,
-    "schema_version": "1.0"
+    "wal_size_mb": 4.11,
+    "schema_version": "1.1"
   },
   "l0": {
     "conversations": 16928,
@@ -234,7 +234,9 @@ interface HealthAlert {
     "max_results": 5,
     "score_threshold": 0.3,
     "timeout_ms": 10000,
-    "status": "healthy"
+    "status": "healthy",
+    "fts_health_score": 100.0,
+    "high_priority_retrievable_pct": 100.0
   },
   "api": {
     "embedding": {
