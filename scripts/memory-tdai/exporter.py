@@ -38,7 +38,7 @@ MEMORY_TDAI_DIR = OPENCLAW_DIR / "memory-tdai"
 VECTORS_DB = MEMORY_TDAI_DIR / "vectors.db"
 OPENCLAW_JSON = OPENCLAW_DIR / "openclaw.json"
 LOG_DIR = OPENCLAW_DIR / "logs"
-OUTPUT_DIR = Path(__file__).parent.parent / "docs" / "memory-tdai" / "data"
+OUTPUT_DIR = Path(__file__).parent.parent.parent / "docs" / "memory-tdai" / "data"
 HISTORY_DIR = OUTPUT_DIR / "history"
 
 # 黑名单字段（永不导出）
