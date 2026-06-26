@@ -328,6 +328,19 @@ body {
   font-weight: 500;
 }
 
+.db-mtd-secondary-sub {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+  font-size: var(--text-caption);
+}
+
+.db-mtd-submetric {
+  color: var(--fg-tertiary);
+}
+.db-mtd-submetric.ok  { color: #30d158; }
+.db-mtd-submetric.warn { color: #ff9f0a; }
+
 /* ── Alerts ─────────────────────────────────────────────── */
 .db-mtd-alerts-list {
   display: flex;

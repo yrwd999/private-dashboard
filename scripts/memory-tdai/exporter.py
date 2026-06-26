@@ -67,6 +67,9 @@ THRESHOLDS = {
     "persona_warning_days": 30,
     "api_errors_critical": 50,
     "api_errors_warning": 5,
+    "fts_health_score_error": 100.0,      # FTS health must be 100% for healthy
+    "fts_health_score_warning": 95.0,
+    "hp_retrievable_warning": 80.0,       # High-priority retrievable % floor
 }
 
 # ---------------------------------------------------------------------------
@@ -147,6 +150,8 @@ ALLOWED_SQL_QUERIES = {
     "l1_vec_count": "SELECT COUNT(*) FROM l1_vec",
     "l0_fts_count": "SELECT COUNT(*) FROM l0_fts",
     "l1_fts_count": "SELECT COUNT(*) FROM l1_fts",
+    "l1_hp_count": "SELECT COUNT(*) FROM l1_records WHERE priority > 90",
+    "l1_hp_fts_count": "SELECT COUNT(*) FROM l1_records WHERE priority > 90 AND EXISTS (SELECT 1 FROM l1_fts WHERE l1_fts.record_id = l1_records.record_id)",
     "db_size": """
         SELECT page_count * page_size AS size_bytes
         FROM pragma_page_count(), pragma_page_size()
@@ -154,20 +159,25 @@ ALLOWED_SQL_QUERIES = {
 }
 
 _SQL_PATTERN = re.compile(
-    r"^\s*"
-    r"(SELECT\s+COUNT\(\*\)\s+FROM\s+(?:l0_conversations|l0_vec|l1_records|l1_vec|l0_fts|l1_fts)"
-    r"|"
-    r"SELECT\s+page_count\s*\*\s*page_size\s+AS\s+size_bytes\s+FROM\s+pragma_page_count\(\)\s*,\s*pragma_page_size\(\)"
-    r")"
-    r"\s*$",
-    re.IGNORECASE | re.DOTALL,
+    # This pattern is used by validate_sql which ALSO does a direct dict lookup.
+    # Here we match only the db_size query (balanced parens). COUNT queries are
+    # validated purely via ALLOWED_SQL_QUERIES dict lookup in validate_sql.
+    r"SELECT\\s+page_count\\s*\\*\\s*page_size\\s+AS\\s+size_bytes"
+    r"\\s+FROM\\s+pragma_page_count\\(\\) \\s*,\\s*pragma_page_size\\(\\) ",
+    re.IGNORECASE,
 )
 
 
+
 def validate_sql(sql: str) -> bool:
-    """Verify SQL is in the allowed whitelist (no SELECT *, no joins)."""
+    """
+    Verify SQL is in the allowed whitelist (no SELECT *, no joins).
+    All queries are validated via ALLOWED_SQL_QUERIES dict values.
+    """
     normalized = " ".join(sql.split())
-    return bool(_SQL_PATTERN.match(normalized))
+    # Normalize stored values the same way for comparison
+    allowed_normalized = {" ".join(v.split()) for v in ALLOWED_SQL_QUERIES.values()}
+    return normalized in allowed_normalized
 
 
 def guarded_query(conn: sqlite3.Connection, sql: str) -> Any:
@@ -401,7 +411,70 @@ def collect_persona() -> dict[str, Any]:
         "last_updated_days_ago": round(days_ago, 1),
         "file_size_bytes": st.st_size,
         "freshness": freshness,
+
     }
+
+
+def collect_recall_quality() -> dict[str, Any]:
+    """
+    Compute recall quality metrics from vectors.db (read-only).
+    Returns fts_health_score and high_priority_retrievable_pct.
+    """
+    if not VECTORS_DB.exists():
+        return {
+            "fts_health_score": 100.0,
+            "l1_fts_count": 0,
+            "l1_records_count": 0,
+            "hp_count": 0,
+            "hp_fts_count": 0,
+            "high_priority_retrievable_pct": 100.0,
+        }
+
+    vec0_path = _vec0_extension_path()
+    if vec0_path is None:
+        # vec0 not available — return safe defaults
+        return {
+            "fts_health_score": 0.0,
+            "l1_fts_count": 0,
+            "l1_records_count": 0,
+            "hp_count": 0,
+            "hp_fts_count": 0,
+            "high_priority_retrievable_pct": 0.0,
+        }
+
+    conn = sqlite3.connect(f"file:{VECTORS_DB}?mode=ro", uri=True)
+    conn.execute("PRAGMA query_only = ON")
+    conn.enable_load_extension(True)
+    conn.load_extension(str(vec0_path))
+
+    try:
+        l1_records_count = guarded_query(conn, ALLOWED_SQL_QUERIES["l1_count"])
+        l1_fts_count = guarded_query(conn, ALLOWED_SQL_QUERIES["l1_fts_count"])
+        hp_count = guarded_query(conn, ALLOWED_SQL_QUERIES["l1_hp_count"])
+        hp_fts_count = guarded_query(conn, ALLOWED_SQL_QUERIES["l1_hp_fts_count"])
+
+        # fts_health_score: % of L1 records that have FTS entries
+        if l1_records_count > 0:
+            fts_health_score = round(l1_fts_count / l1_records_count * 100, 1)
+        else:
+            fts_health_score = 100.0
+
+        # high_priority_retrievable_pct: % of hp records that have FTS
+        if hp_count > 0:
+            high_priority_retrievable_pct = round(hp_fts_count / hp_count * 100, 1)
+        else:
+            high_priority_retrievable_pct = 100.0  # no hp records = trivially healthy
+
+        return {
+            "fts_health_score": fts_health_score,
+            "l1_fts_count": l1_fts_count,
+            "l1_records_count": l1_records_count,
+            "hp_count": hp_count,
+            "hp_fts_count": hp_fts_count,
+            "high_priority_retrievable_pct": high_priority_retrievable_pct,
+        }
+    finally:
+        conn.close()
 
 
 def collect_openclaw_config() -> dict[str, Any]:
@@ -521,6 +594,8 @@ def build_health_alerts(
     recall_status: str,
     cleaner_l0_expired: int,
     ts: str,
+    fts_health_score: float = 100.0,
+    hp_retrievable_pct: float = 100.0,
 ) -> list[dict[str, Any]]:
     """Generate health alert list based on thresholds."""
     alerts = []
@@ -638,6 +713,37 @@ def build_health_alerts(
             "timestamp": ts,
         })
 
+    # FTS index desync — fts_health_score < 100 means some L1 records not in FTS
+    if fts_health_score < THRESHOLDS["fts_health_score_error"]:
+        alerts.append({
+            "level": "error",
+            "code": "FTS_INDEX_DESYNC",
+            "message": f"FTS5 索引不完整：健康分 {fts_health_score}%（应 = 100%）",
+            "value": round(fts_health_score, 1),
+            "threshold": THRESHOLDS["fts_health_score_error"],
+            "timestamp": ts,
+        })
+    elif fts_health_score < THRESHOLDS["fts_health_score_warning"]:
+        alerts.append({
+            "level": "warning",
+            "code": "FTS_INDEX_DESYNC",
+            "message": f"FTS5 索引健康分 {fts_health_score}%（应 = 100%）",
+            "value": round(fts_health_score, 1),
+            "threshold": THRESHOLDS["fts_health_score_warning"],
+            "timestamp": ts,
+        })
+
+    # High-priority retrievability low
+    if hp_retrievable_pct < THRESHOLDS["hp_retrievable_warning"]:
+        alerts.append({
+            "level": "warning",
+            "code": "RECALL_HP_RETRIEVE_LOW",
+            "message": f"高优先级可检索率 {hp_retrievable_pct}%（priority > 90 且 FTS 命中），低于阈值 {THRESHOLDS['hp_retrievable_warning']}%",
+            "value": round(hp_retrievable_pct, 1),
+            "threshold": THRESHOLDS["hp_retrievable_warning"],
+            "timestamp": ts,
+        })
+
     # Cleaner effectiveness
     if cleaner_l0_expired == 0:
         alerts.append({
@@ -661,6 +767,7 @@ def assemble_output(
     persona_data: dict[str, Any],
     jsonl_data: dict[str, Any],
     wal_mb: float,
+    recall_quality: dict[str, Any],
 ) -> dict[str, Any]:
     """Assemble the complete output JSON."""
     ts = _ts()
@@ -678,7 +785,12 @@ def assemble_output(
     db_size_mb = round(db_stats["db_size_bytes"] / (1024 * 1024), 1)
     recall_cfg = config.get("recall", {})
     recall_strategy = recall_cfg.get("strategy", "keyword")
-    recall_status = "degraded" if l0_pct < 95.0 else "healthy"
+    # Recall healthy only when both L0 completeness >= 95% AND FTS health = 100%
+    recall_status = (
+        "healthy"
+        if l0_pct >= 95.0 and recall_quality["fts_health_score"] == 100.0
+        else "degraded"
+    )
 
     cleaning_cfg = config.get("cleaning", {})
     cleaning_retention = cleaning_cfg.get("retention_days", 90)
@@ -698,6 +810,8 @@ def assemble_output(
         recall_status=recall_status,
         cleaner_l0_expired=0,  # Cleaner hasn't run in this context — placeholder
         ts=ts,
+        fts_health_score=recall_quality["fts_health_score"],
+        hp_retrievable_pct=recall_quality["high_priority_retrievable_pct"],
     )
 
     output = {
@@ -708,7 +822,7 @@ def assemble_output(
             "jsonl_total_mb": jsonl_data["total_mb"],
             "jsonl_file_count": jsonl_data["file_count"],
             "wal_size_mb": round(wal_mb, 2),
-            "schema_version": "1.0",
+            "schema_version": "1.1",
         },
         "l0": {
             "conversations": l0_total,
@@ -772,6 +886,8 @@ def assemble_output(
             "score_threshold": recall_cfg.get("score_threshold", 0.3),
             "timeout_ms": recall_cfg.get("timeout_ms", 10000),
             "status": recall_status,
+            "fts_health_score": recall_quality["fts_health_score"],
+            "high_priority_retrievable_pct": recall_quality["high_priority_retrievable_pct"],
         },
         "api": {
             "embedding": {
@@ -850,6 +966,12 @@ def run(dry_run: bool = False, validate_schema_flag: bool = False) -> None:
     wal_mb = collect_wal_size()
     logger.info(f"WAL: {wal_mb:.2f} MB")
 
+    recall_quality = collect_recall_quality()
+    logger.info(
+        f"Recall quality: fts_health={recall_quality['fts_health_score']}%, "
+        f"hp_retrievable={recall_quality['high_priority_retrievable_pct']}%"
+    )
+
     # Step 2: Assemble
     output = assemble_output(
         db_stats=db_stats,
@@ -859,6 +981,7 @@ def run(dry_run: bool = False, validate_schema_flag: bool = False) -> None:
         persona_data=persona_data,
         jsonl_data=jsonl_data,
         wal_mb=wal_mb,
+        recall_quality=recall_quality,
     )
 
     # Step 3: Blacklist scan (fail on any violation)

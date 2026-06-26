@@ -1,7 +1,7 @@
 # memory-tdai Dashboard · Data Schema
 
 > `data/latest.json` + `data/history/YYYY-MM-DD.json` 字段定义
-> 最后更新：2026-06-24 · 维护者：Ray
+> 最后更新：2026-06-26 · 维护者：Ray · Schema v1.1
 
 ---
 
@@ -14,7 +14,7 @@
 
 ---
 
-## 🧬 Schema v1.0
+## 🧬 Schema v1.1
 
 ```typescript
 interface MemoryTdaiData {
@@ -106,7 +106,9 @@ interface RecallConfig {
   max_results: number;
   score_threshold: number;
   timeout_ms: number;
-  status: "healthy" | "degraded";    // degraded = 向量完整率 < 95%
+  status: "healthy" | "degraded";    // degraded = L0 completeness < 95% OR FTS health < 100%
+  fts_health_score: number;           // FTS5 索引健康分：l1_fts / l1_records * 100
+  high_priority_retrievable_pct: number;  // priority > 90 且 FTS 命中的记录比例，0~100
 }
 
 interface ApiStats {
@@ -293,7 +295,9 @@ interface HealthAlert {
 | `l2.freshness` | days_ago ≤ 7 = healthy / ≤ 30 = warning / > 30 = stale |
 | `l3.freshness` | days_ago ≤ 30 = healthy / ≤ 90 = warning / > 90 = stale |
 | `wal_oversized` | wal_mb > 5 |
-| `recall.status` | `completeness_pct >= 95 ? "healthy" : "degraded"` |
+| `recall.status` | `l0.completeness_pct >= 95 AND recall.fts_health_score == 100 ? "healthy" : "degraded"` |
+| `recall.fts_health_score` | `l1_fts_count / l1_records * 100`，保留 1 位小数 |
+| `recall.high_priority_retrievable_pct` | `COUNT(priority>90 AND exists_in_fts) / COUNT(priority>90) * 100`；无高优先级记录时 = 100 |
 | `cleaning.effectiveness` | `l0_expired + l1_expired > 0 ? "healthy" : "low"` |
 | `storage.storage_growth_mb_per_day` | 从 history 推算近 7 天平均 |
 
@@ -303,7 +307,7 @@ interface HealthAlert {
 
 | 字段 | 约束 |
 |------|------|
-| `meta.schema_version` | 升级时 bump（1.0 → 1.1），HTML 端按版本兼容 |
+| `meta.schema_version` | 升级时 bump（1.1 → 1.2），HTML 端按版本兼容 |
 | `l0.capture_trend_30d` | 必须恰好 30 项（不够补 0） |
 | `health_alerts` | 上限 20 项（按 level + timestamp 排序：critical > error > warning > info > success） |
 | `l2.file_list` | 仅导出文件名（语义名），不含路径和 record_id |

@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "generated_at": "2026-06-26T08:58:05+08:00",
+    "vectors_db_size_mb": 150.6,
+    "vectors_db_path": "memory-tdai/vectors.db",
+    "jsonl_total_mb": 15.574,
+    "jsonl_file_count": 26,
+    "wal_size_mb": 4.0,
+    "schema_version": "1.1"
+  },
+  "l0": {
+    "conversations": 20362,
+    "vectors": 20328,
+    "missing": 34,
+    "completeness_pct": 99.8,
+    "fts_synced": true,
+    "errors_24h": {
+      "http_400_batch_size": 0,
+      "http_429_rate_limit": 0,
+      "http_500_server": 0,
+      "timeout": 0,
+      "db_locked": 0,
+      "total": 0
+    },
+    "capture_trend_30d": []
+  },
+  "l1": {
+    "records": 224,
+    "vectors": 218,
+    "missing": 6,
+    "completeness_pct": 97.3,
+    "fts_synced": true,
+    "errors_24h": {
+      "http_400_batch_size": 0,
+      "http_429_rate_limit": 0,
+      "http_500_server": 0,
+      "timeout": 0,
+      "db_locked": 0,
+      "total": 0
+    },
+    "extraction_failures_24h": 0,
+    "extraction_latency_ms_p95": 0
+  },
+  "l2": {
+    "scene_blocks": 11,
+    "last_updated": "2026-06-26T06:49:20Z",
+    "last_updated_days_ago": 0.1,
+    "file_list": [
+      "AI-记忆系统升级决策.md",
+      "Apex系统集成与技术调研.md",
+      "LCM-数据治理与可视化演进.md",
+      "LCM-系统与工具治理.md",
+      "OpenClaw-系统治理与规范约束.md",
+      "TencentDB-系统优化与处置闭环.md",
+      "外部生态集成-小红书解析.md",
+      "智能家居设备与环境配置.md",
+      "本地网络与基础设施配置.md",
+      "采购项目-AI助手架构迭代.md",
+      "项目交付与文档工程规范.md"
+    ],
+    "freshness": "healthy"
+  },
+  "l3": {
+    "persona_exists": true,
+    "last_updated": "2026-06-26T08:07:36Z",
+    "last_updated_days_ago": 0.0,
+    "file_size_bytes": 8529,
+    "freshness": "healthy"
+  },
+  "storage": {
+    "vectors_db_mb": 150.6,
+    "wal_mb": 4.0,
+    "wal_oversized": false,
+    "jsonl_total_mb": 15.574,
+    "jsonl_file_count": 26,
+    "backup_mb": 0.0,
+    "storage_growth_mb_per_day": 0.0
+  },
+  "recall": {
+    "strategy": "hybrid",
+    "max_results": 5,
+    "score_threshold": 0.3,
+    "timeout_ms": 10000,
+    "status": "healthy",
+    "fts_health_score": 100.0,
+    "high_priority_retrievable_pct": 100.0
+  },
+  "api": {
+    "embedding": {
+      "provider": "dashscope",
+      "model": "text-embedding-v4",
+      "dimensions": 1024,
+      "send_dimensions": true,
+      "availability_24h": 100.0,
+      "errors_24h": 0,
+      "p95_latency_ms": 0
+    },
+    "llm": {
+      "provider": null,
+      "model": "qwen3.6-flash",
+      "availability_24h": 100.0,
+      "errors_24h": 0
+    }
+  },
+  "cleaning": {
+    "retention_days": 90,
+    "clean_time": "03:00",
+    "last_run": null,
+    "last_run_days_ago": 9999,
+    "l0_total": 20362,
+    "l0_expired": 0,
+    "l1_total": 224,
+    "l1_expired": 0,
+    "effectiveness": "low"
+  },
+  "health_alerts": [
+    {
+      "level": "warning",
+      "code": "L0_EMBEDDING_INCOMPLETE",
+      "message": "L0 向量完整率 99.8%（缺失 34 条）",
+      "value": 99.8,
+      "threshold": 99.0,
+      "timestamp": "2026-06-26T08:58:05+08:00"
+    },
+    {
+      "level": "warning",
+      "code": "CLEAN_EFFECTIVENESS_LOW",
+      "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
+      "timestamp": "2026-06-26T08:58:05+08:00"
+    }
+  ]
+}

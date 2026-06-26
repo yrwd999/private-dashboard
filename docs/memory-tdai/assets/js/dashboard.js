@@ -364,11 +364,17 @@ class DashboardMemoryTdai {
     if (recallEl) {
       const recallColor = recall.status === 'healthy' ? 'green' : 'orange';
       const recallIcon = recall.status === 'healthy' ? '✅' : '⚠️';
+      const ftsOk = recall.fts_health_score >= 99;
+      const hpOk = recall.high_priority_retrievable_pct >= 90;
       recallEl.innerHTML = `
         <div class="db-mtd-secondary-item">
           <div class="db-mtd-secondary-label">🔍 Recall 策略</div>
-          <div class="db-mtd-secondary-value">${recall.strategy}</div>
+          <div class="db-mtd-secondary-value">${recall.strategy} · max=${recall.max_results}</div>
           <div class="db-mtd-secondary-delta db-mtd-color-${recallColor}">${recallIcon} ${recall.status}</div>
+          <div class="db-mtd-secondary-sub">
+            <span class="db-mtd-submetric ${ftsOk ? 'ok' : 'warn'}">FTS索引 ${(recall.fts_health_score ?? 'N/A').toFixed(1)}%</span>
+            <span class="db-mtd-submetric ${hpOk ? 'ok' : 'warn'}">高优可检索 ${(recall.high_priority_retrievable_pct ?? 'N/A').toFixed(1)}%</span>
+          </div>
         </div>
       `;
     }
