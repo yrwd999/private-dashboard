@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-06-27T02:02:45.714466+08:00",
+  "task": "lcm-doctor-scan",
+  "db_path": ".openclaw/lcm.db",
+  "db_size_mb": 598.15,
+  "summary_checks": [
+    {
+      "check": "orphaned_summaries",
+      "passed": true,
+      "count": 0,
+      "message": "No orphaned summaries"
+    },
+    {
+      "check": "null_conversation_summaries",
+      "passed": true,
+      "count": 0,
+      "message": "All summaries have valid conversation_id"
+    },
+    {
+      "check": "empty_condensed_summaries",
+      "passed": true,
+      "count": 0,
+      "message": "No empty condensed summaries"
+    },
+    {
+      "check": "deep_summary_levels",
+      "passed": true,
+      "count": 0,
+      "message": "Summary levels are reasonable"
+    },
+    {
+      "check": "summary_stats",
+      "passed": true,
+      "total": 1006,
+      "distinct_conversations": 56,
+      "message": "1006 summaries across 56 conversations"
+    }
+  ],
+  "conversation_checks": [
+    {
+      "check": "conversation_counts",
+      "passed": true,
+      "total": 161,
+      "active": 65,
+      "archived": 96,
+      "message": "161 conversations (65 active, 96 archived)"
+    },
+    {
+      "check": "empty_conversations",
+      "passed": false,
+      "count": 32,
+      "message": "32 conversations with no messages"
+    },
+    {
+      "check": "stale_archived_conversations",
+      "passed": true,
+      "count": 4,
+      "threshold_days": 30,
+      "message": "4 archived conversations older than 30 days"
+    },
+    {
+      "check": "archived_subagent_sessions",
+      "passed": false,
+      "count": 31,
+      "message": "31 archived subagent sessions (may be junk)"
+    }
+  ],
+  "message_checks": [
+    {
+      "check": "orphaned_messages",
+      "passed": true,
+      "count": 0,
+      "message": "No orphaned messages"
+    },
+    {
+      "check": "zero_message_conversations",
+      "passed": false,
+      "count": 32,
+      "message": "32 conversations with zero messages"
+    },
+    {
+      "check": "message_stats",
+      "passed": true,
+      "total": 54770,
+      "oldest_message": "2026-04-24 08:13:38",
+      "newest_message": "2026-06-26 17:43:10",
+      "message": "54770 messages (2026-04-24 08:13:38 → 2026-06-26 17:43:10)"
+    }
+  ],
+  "wal_checks": [
+    {
+      "check": "wal_ratio",
+      "passed": true,
+      "wal_size_mb": 4.01,
+      "db_size_mb": 598.15,
+      "ratio": 0.0067,
+      "message": "WAL/DB ratio: 0.67% (OK)"
+    },
+    {
+      "check": "wal_absolute_size",
+      "passed": true,
+      "wal_size_mb": 4.01,
+      "message": "WAL size: 4.01 MB (OK)"
+    }
+  ],
+  "backup_checks": [
+    {
+      "check": "backup_file_count",
+      "passed": true,
+      "count": 5,
+      "total_size_mb": 2571.4,
+      "message": "5 .bak files (2571.4 MB)"
+    },
+    {
+      "check": "old_backup_files",
+      "passed": true,
+      "count": 0,
+      "files": [],
+      "message": "No stale .bak files"
+    }
+  ],
+  "overall": {
+    "passed": false,
+    "errors": 3,
+    "warnings": 0
+  }
+}
