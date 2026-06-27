@@ -1,19 +1,21 @@
 {
-  "generated_at": "2026-06-27T03:05:05.293220+08:00",
+  "generated_at": "2026-06-28T03:00:37.787367+08:00",
   "db_size_mb": 598.15,
   "wal_size_mb": 4.01,
   "wal_db_ratio": 0.0067,
   "wal_trend": {
-    "trend": "shrinking",
-    "daily_growth_mb": 52.34,
-    "samples": 4,
+    "trend": "stable",
+    "daily_growth_mb": 39.255,
+    "samples": 5,
     "wal_history": [
+      4.01,
       4.01,
       147.48,
       5.9,
       5.9
     ],
     "db_history": [
+      598.15,
       598.15,
       545.15,
       460.73,
@@ -27,9 +29,9 @@
   },
   "message_volume": {
     "alert": "ok",
-    "drop_rate": 1.087,
-    "today": 54770,
-    "yesterday": 50400
+    "drop_rate": 1.017,
+    "today": 55723,
+    "yesterday": 54770
   },
   "health_alerts": [
     {
@@ -38,7 +40,7 @@
       "message": "WAL/DB 比例正常：0.67%",
       "value": 0.0067,
       "threshold": 0.1,
-      "timestamp": "2026-06-27T03:05:05.293182+08:00"
+      "timestamp": "2026-06-28T03:00:37.787343+08:00"
     },
     {
       "level": "info",
@@ -46,28 +48,27 @@
       "message": "WAL 文件大小正常：4.01 MB",
       "value": 4.01,
       "threshold": 50.0,
-      "timestamp": "2026-06-27T03:05:05.293182+08:00"
+      "timestamp": "2026-06-28T03:00:37.787343+08:00"
+    },
+    {
+      "level": "info",
+      "code": "WAL_TREND_STABLE",
+      "message": "WAL 增长趋势平稳",
+      "trend": "stable",
+      "timestamp": "2026-06-28T03:00:37.787343+08:00"
     },
     {
       "level": "success",
       "code": "ARCHIVE_FRESH",
       "message": "今日已有归档记录",
       "days_since_archive": 0,
-      "timestamp": "2026-06-27T03:05:05.293182+08:00"
+      "timestamp": "2026-06-28T03:00:37.787343+08:00"
     },
     {
       "level": "info",
       "code": "MSG_VOLUME_NORMAL",
       "message": "消息量正常",
-      "timestamp": "2026-06-27T03:05:05.293182+08:00"
-    },
-    {
-      "level": "warning",
-      "code": "DB_GROWTH_HIGH",
-      "message": "DB 日增长率较高：52.3 MB/天（阈值 51 MB）",
-      "daily_growth_mb": 52.34,
-      "threshold_mb": 51.2,
-      "timestamp": "2026-06-27T03:05:05.293182+08:00"
+      "timestamp": "2026-06-28T03:00:37.787343+08:00"
     }
   ]
 }
