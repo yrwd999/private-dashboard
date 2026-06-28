@@ -1,16 +1,16 @@
 {
   "meta": {
-    "generated_at": "2026-06-28T16:32:52+08:00",
-    "vectors_db_size_mb": 157.1,
+    "generated_at": "2026-06-28T17:32:24+08:00",
+    "vectors_db_size_mb": 157.4,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_mb": 16.194,
+    "jsonl_total_mb": 16.246,
     "jsonl_file_count": 28,
     "wal_size_mb": 4.03,
     "schema_version": "1.1"
   },
   "l0": {
-    "conversations": 21182,
-    "vectors": 21182,
+    "conversations": 21251,
+    "vectors": 21251,
     "missing": 0,
     "completeness_pct": 100.0,
     "fts_synced": true,
@@ -25,8 +25,8 @@
     "capture_trend_30d": []
   },
   "l1": {
-    "records": 226,
-    "vectors": 220,
+    "records": 223,
+    "vectors": 217,
     "missing": 6,
     "completeness_pct": 97.3,
     "fts_synced": true,
@@ -43,7 +43,7 @@
   },
   "l2": {
     "scene_blocks": 12,
-    "last_updated": "2026-06-28T08:04:34Z",
+    "last_updated": "2026-06-28T09:32:12Z",
     "last_updated_days_ago": 0.0,
     "file_list": [
       "AI-记忆系统升级决策.md",
@@ -63,16 +63,16 @@
   },
   "l3": {
     "persona_exists": true,
-    "last_updated": "2026-06-28T08:04:35Z",
+    "last_updated": "2026-06-28T09:32:17Z",
     "last_updated_days_ago": 0.0,
-    "file_size_bytes": 9836,
+    "file_size_bytes": 10359,
     "freshness": "healthy"
   },
   "storage": {
-    "vectors_db_mb": 157.1,
+    "vectors_db_mb": 157.4,
     "wal_mb": 4.03,
     "wal_oversized": false,
-    "jsonl_total_mb": 16.194,
+    "jsonl_total_mb": 16.246,
     "jsonl_file_count": 28,
     "backup_mb": 0.0,
     "storage_growth_mb_per_day": 0.0
@@ -108,9 +108,9 @@
     "clean_time": "03:00",
     "last_run": null,
     "last_run_days_ago": 9999,
-    "l0_total": 21182,
+    "l0_total": 21251,
     "l0_expired": 0,
-    "l1_total": 226,
+    "l1_total": 223,
     "l1_expired": 0,
     "effectiveness": "low"
   },
@@ -119,7 +119,7 @@
       "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-28T16:32:52+08:00"
+      "timestamp": "2026-06-28T17:32:24+08:00"
     }
   ]
 }
