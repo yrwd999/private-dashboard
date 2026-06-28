@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generated_at": "2026-06-28T20:32:09+08:00",
+    "generated_at": "2026-06-28T21:32:17+08:00",
     "vectors_db_size_mb": 157.8,
     "vectors_db_path": "memory-tdai/vectors.db",
-    "jsonl_total_mb": 16.328,
+    "jsonl_total_mb": 16.359,
     "jsonl_file_count": 28,
-    "wal_size_mb": 4.03,
+    "wal_size_mb": 4.08,
     "schema_version": "1.1"
   },
   "l0": {
-    "conversations": 21340,
-    "vectors": 21340,
-    "missing": 0,
+    "conversations": 21400,
+    "vectors": 21396,
+    "missing": 4,
     "completeness_pct": 100.0,
     "fts_synced": true,
     "errors_24h": {
@@ -25,8 +25,8 @@
     "capture_trend_30d": []
   },
   "l1": {
-    "records": 223,
-    "vectors": 217,
+    "records": 220,
+    "vectors": 214,
     "missing": 6,
     "completeness_pct": 97.3,
     "fts_synced": true,
@@ -43,7 +43,7 @@
   },
   "l2": {
     "scene_blocks": 12,
-    "last_updated": "2026-06-28T11:31:08Z",
+    "last_updated": "2026-06-28T13:09:50Z",
     "last_updated_days_ago": 0.0,
     "file_list": [
       "AI-记忆系统升级决策.md",
@@ -63,16 +63,16 @@
   },
   "l3": {
     "persona_exists": true,
-    "last_updated": "2026-06-28T11:31:27Z",
+    "last_updated": "2026-06-28T13:09:52Z",
     "last_updated_days_ago": 0.0,
-    "file_size_bytes": 10468,
+    "file_size_bytes": 10481,
     "freshness": "healthy"
   },
   "storage": {
     "vectors_db_mb": 157.8,
-    "wal_mb": 4.03,
+    "wal_mb": 4.08,
     "wal_oversized": false,
-    "jsonl_total_mb": 16.328,
+    "jsonl_total_mb": 16.359,
     "jsonl_file_count": 28,
     "backup_mb": 0.0,
     "storage_growth_mb_per_day": 0.0
@@ -108,18 +108,26 @@
     "clean_time": "03:00",
     "last_run": null,
     "last_run_days_ago": 9999,
-    "l0_total": 21340,
+    "l0_total": 21400,
     "l0_expired": 0,
-    "l1_total": 223,
+    "l1_total": 220,
     "l1_expired": 0,
     "effectiveness": "low"
   },
   "health_alerts": [
     {
       "level": "warning",
+      "code": "L0_EMBEDDING_INCOMPLETE",
+      "message": "L0 向量完整率 100.0%（缺失 4 条）",
+      "value": 100.0,
+      "threshold": 99.0,
+      "timestamp": "2026-06-28T21:32:17+08:00"
+    },
+    {
+      "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-06-28T20:32:09+08:00"
+      "timestamp": "2026-06-28T21:32:17+08:00"
     }
   ]
 }
