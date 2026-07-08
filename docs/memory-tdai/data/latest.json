@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-07-08T10:06:28+08:00",
+    "generated_at": "2026-07-08T10:06:42+08:00",
     "vectors_db_size_mb": 200.0,
     "vectors_db_path": "memory-tdai/vectors.db",
     "jsonl_total_mb": 20.573,
@@ -123,7 +123,7 @@
       "message": "L0 向量完整率 99.8%（缺失 65 条）",
       "value": 99.8,
       "threshold": 99.0,
-      "timestamp": "2026-07-08T10:06:28+08:00"
+      "timestamp": "2026-07-08T10:06:42+08:00"
     },
     {
       "level": "warning",
@@ -131,13 +131,13 @@
       "message": "WAL 文件 7.8MB（正常 < 5.0MB）",
       "value": 7.78,
       "threshold": 5.0,
-      "timestamp": "2026-07-08T10:06:28+08:00"
+      "timestamp": "2026-07-08T10:06:42+08:00"
     },
     {
       "level": "warning",
       "code": "CLEAN_EFFECTIVENESS_LOW",
       "message": "Cleaner 连续 0 条过期记录（retention=90d 可能过长）",
-      "timestamp": "2026-07-08T10:06:28+08:00"
+      "timestamp": "2026-07-08T10:06:42+08:00"
     }
   ]
 }
